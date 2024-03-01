@@ -6,6 +6,8 @@ import {
   useConfigDispatch,
 } from "../context/ConfigtDataContext";
 import * as d3 from "d3";
+import dataType from "../types/DataType";
+import { dataNormalizer } from "../utils/helperFunctions";
 
 const CandlestickChartController: React.FC<{
   chartData: any;
@@ -24,7 +26,7 @@ const CandlestickChartController: React.FC<{
   useEffect(() => {
     dispatchData({
       type: "changeInitData",
-      initData: chartData,
+      initData: dataNormalizer(chartData) as dataType[],
     });
   }, [chartData]);
   useEffect(() => {
