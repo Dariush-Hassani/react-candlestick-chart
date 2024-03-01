@@ -1,6 +1,6 @@
 import { useData, useDataDispatch } from "../context/DataContext";
 import Layout from "./Layout";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useConfigData,
   useConfigDispatch,
@@ -18,7 +18,7 @@ const CandlestickChartController: React.FC<{
   const dispatchConfig = useConfigDispatch();
   const data = useData();
   const config = useConfigData();
-  let yScaleFunction = null;
+  const [yScaleFunction, setYScaleFunction] = useState<any>(null);
   let xScaleFunction = null;
 
   useEffect(() => {
@@ -35,13 +35,14 @@ const CandlestickChartController: React.FC<{
   }, [decimal]);
 
   useEffect(() => {
-    yScaleFunction = d3
+    let newYScaleFunction = d3
       .scaleLinear()
       .domain([
         (data.minMaxShownPrice.min -= config.emptySpaceFromBottomPercent),
         (data.minMaxShownPrice.max -= config.emptySpaceFromTopPercent),
       ])
       .range([0, config.canvasHeight ?? 0]);
+    setYScaleFunction(() => newYScaleFunction);
   }, [data.minMaxShownPrice, config.canvasHeight]);
 
   useEffect(() => {
