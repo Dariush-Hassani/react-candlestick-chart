@@ -4,11 +4,13 @@ import {
   ConfigDataContextType,
 } from "../types/ConfigDataContextType";
 
-const initData = {
+const initData: ConfigDataContextType = {
   decimal: 0,
   characterFontWidth: 7.8,
   canvasWidth: 0,
   canvasHeight: 0,
+  emptySpaceFromBottomPercent: 3 / 100,
+  emptySpaceFromTopPercent: 4 / 100,
 };
 const ConfigDataContext = createContext<ConfigDataContextType>(initData);
 const ConfigDispatchContext = createContext<Dispatch<ConfigDataActionType>>(

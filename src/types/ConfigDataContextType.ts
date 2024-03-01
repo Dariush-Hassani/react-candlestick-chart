@@ -3,6 +3,8 @@ export type ConfigDataContextType = {
   canvasHeight?: number;
   decimal: number;
   characterFontWidth: number;
+  emptySpaceFromTopPercent: number;
+  emptySpaceFromBottomPercent: number;
 };
 
 export type ConfigDataActionType =

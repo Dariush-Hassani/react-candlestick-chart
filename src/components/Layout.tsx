@@ -10,7 +10,9 @@ const Layout: React.FC<{
   width: number;
   height: number;
   children: React.ReactNode;
-}> = ({ id, width, height }) => {
+  xScaleFunction: any;
+  yScaleFunction: any;
+}> = ({ id, width, height, yScaleFunction, xScaleFunction }) => {
   const data = useData();
 
   const config = useConfigData();
