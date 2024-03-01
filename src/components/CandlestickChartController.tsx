@@ -19,7 +19,7 @@ const CandlestickChartController: React.FC<{
   const data = useData();
   const config = useConfigData();
   const [yScaleFunction, setYScaleFunction] = useState<any>(null);
-  let xScaleFunction = null;
+  const [xScaleFunction, setXScaleFunction] = useState<any>(null);
 
   useEffect(() => {
     dispatchData({
@@ -38,18 +38,21 @@ const CandlestickChartController: React.FC<{
     let newYScaleFunction = d3
       .scaleLinear()
       .domain([
-        (data.minMaxShownPrice.min -= config.emptySpaceFromBottomPercent),
-        (data.minMaxShownPrice.max -= config.emptySpaceFromTopPercent),
+        data.minMaxShownPrice.max +
+          config.emptySpaceFromTopPercent * data.minMaxShownPrice.max,
+        data.minMaxShownPrice.min -
+          config.emptySpaceFromBottomPercent * data.minMaxShownPrice.min,
       ])
       .range([0, config.canvasHeight ?? 0]);
     setYScaleFunction(() => newYScaleFunction);
   }, [data.minMaxShownPrice, config.canvasHeight]);
 
   useEffect(() => {
-    xScaleFunction = d3
+    let newXScaleFunction = d3
       .scaleTime()
       .domain([data.shownRange.start, data.shownRange.end])
       .range([0, config.canvasWidth ?? 0]);
+    setXScaleFunction(() => newXScaleFunction);
   }, [data.shownRange, config.canvasWidth]);
 
   return (

@@ -16,6 +16,7 @@ const Layout: React.FC<{
   yScaleFunction: any;
 }> = ({ id, width, height, yScaleFunction, xScaleFunction }) => {
   const yAxisId = `${id}-yAxis`;
+  const xAxisId = `${id}-xAxis`;
   const data = useData();
 
   const config = useConfigData();
@@ -46,15 +47,27 @@ const Layout: React.FC<{
         .axisRight(yScaleFunction)
         .tickSize(config.canvasWidth ?? 0);
       d3.select(`#${yAxisId}`).append("g").call(yAxis);
-
       d3.select(`#${yAxisId} .domain`).remove();
-
       d3.selectAll(`#${yAxisId} g text`).attr("transform", "translate(5,0)");
-
       d3.selectAll(`#${yAxisId} .tick line`).style("stroke", colors.grid);
       d3.selectAll(`#${yAxisId} .tick text`).style("fill", colors.tick);
     }
   }, [yScaleFunction]);
+
+  useEffect(() => {
+    if (xScaleFunction) {
+      d3.select(`#${xAxisId}`).html("");
+      let xAxis = d3
+        .axisBottom(xScaleFunction)
+        .ticks((config.canvasWidth ?? 0) / 100)
+        .tickSize(config.canvasHeight ?? 0);
+      d3.select(`#${xAxisId}`).append("g").call(xAxis);
+      d3.select(`#${xAxisId} .domain`).remove();
+      d3.selectAll(`#${xAxisId} g text`).attr("transform", "translate(0,10)");
+      d3.selectAll(`#${xAxisId} .tick line`).style("stroke", colors.grid);
+      d3.selectAll(`#${xAxisId} .tick text`).style("fill", colors.tick);
+    }
+  }, [xScaleFunction]);
 
   return (
     <div
@@ -73,7 +86,7 @@ const Layout: React.FC<{
         style={{ overflow: "inherit", cursor: "crosshair" }}
       >
         <g id={`${yAxisId}`}></g>
-        <g id={`${id}-xAxis`}></g>
+        <g id={`${xAxisId}`}></g>
       </svg>
     </div>
   );
