@@ -1,4 +1,4 @@
-import DataType from './DataType';
+import DataType from "./DataType";
 
 export type DataContextType = {
   initData: DataType[];
@@ -24,12 +24,12 @@ export type DataContextType = {
     max: number;
   };
   zoomFactor: number;
-  increamentZoomFactor: number;
-  decreamentZoomFactor: number;
+  incrementZoomFactor: number;
+  decrementZoomFactor: number;
   candleWidthDate: number;
   candleLockerWidthDate: number;
 };
 
 export type DataActionType =
-  | { type: 'changeInitData'; initData: DataType[] }
-  | { type: 'changeShownRange'; shownRange: { start: number; end: number } };
+  | { type: "changeInitData"; initData: DataType[] }
+  | { type: "changeShownRange"; shownRange: { start: number; end: number } };

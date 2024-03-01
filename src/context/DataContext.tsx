@@ -1,10 +1,10 @@
-import { createContext, useReducer, Dispatch, useContext } from 'react';
-import { DataActionType, DataContextType } from '../types/DataContextType';
+import React, { createContext, useReducer, Dispatch, useContext } from "react";
+import { DataActionType, DataContextType } from "../types/DataContextType";
 import {
   calculateCandleWidthDate,
   dateArrayNormalizer,
-} from '../utils/helperFunctions';
-import * as d3 from 'd3';
+} from "../utils/helperFunctions";
+import * as d3 from "d3";
 
 const initData: DataContextType = {
   initData: [],
@@ -30,8 +30,8 @@ const initData: DataContextType = {
     max: 0,
   },
   zoomFactor: 1,
-  increamentZoomFactor: 1.2,
-  decreamentZoomFactor: 1.2,
+  incrementZoomFactor: 1.2,
+  decrementZoomFactor: 1.2,
   candleWidthDate: 0,
   candleLockerWidthDate: 0,
 };
@@ -41,9 +41,9 @@ const DataDispatchContext = createContext<Dispatch<DataActionType>>(() => {});
 
 function dataReducer(state: DataContextType, action: DataActionType) {
   switch (action.type) {
-    case 'changeInitData': {
-      if(action.initData.length === 0) return state;
-      
+    case "changeInitData": {
+      if (action.initData.length === 0) return state;
+
       let newInitData = action.initData;
 
       let initDates = newInitData.map((x) => x.date);
@@ -99,14 +99,14 @@ function dataReducer(state: DataContextType, action: DataActionType) {
           max: newMinMaxInitPrice[1] as number,
         },
         zoomFactor: state.zoomFactor,
-        increamentZoomFactor: state.increamentZoomFactor,
-        decreamentZoomFactor: state.decreamentZoomFactor,
+        incrementZoomFactor: state.incrementZoomFactor,
+        decrementZoomFactor: state.decrementZoomFactor,
         candleWidthDate: candleWidth,
         candleLockerWidthDate: candleLockerWidth,
       };
       return newState;
     }
-    case 'changeShownRange': {
+    case "changeShownRange": {
       let oldCandleWidthDate = state.candleWidthDate;
 
       let newShownRange = {
@@ -114,14 +114,14 @@ function dataReducer(state: DataContextType, action: DataActionType) {
         end: action.shownRange.end,
       };
 
-      let newZoomFactor : number =
+      let newZoomFactor: number =
         (state.minMaxInitDate.max - state.minMaxInitDate.min) /
         (newShownRange.end - newShownRange.start);
 
       let newShownData = state.initData.filter(
         (x) =>
           x.date < action.shownRange.end - oldCandleWidthDate &&
-          x.date > action.shownRange.start + oldCandleWidthDate
+          x.date > action.shownRange.start + oldCandleWidthDate,
       );
       let shownDates = newShownData.map((x) => x.date);
 
@@ -136,12 +136,12 @@ function dataReducer(state: DataContextType, action: DataActionType) {
       let highPrices: number[] = newShownData.map((x) => x.high as number);
       let lowPrices: number[] = newShownData.map((x) => x.low as number);
 
-      let allPrices : number[]=[
+      let allPrices: number[] = [
         ...highPrices,
         ...lowPrices,
         ...slPrices,
         ...tpPrices,
-      ]
+      ];
       let newMinMaxShownPrice = d3.extent(allPrices);
 
       let [newCandleWidthDate, newCandleLockerWidthDate] =

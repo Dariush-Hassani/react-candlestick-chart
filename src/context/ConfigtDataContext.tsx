@@ -1,28 +1,32 @@
-import { createContext, useContext, useReducer, Dispatch } from 'react';
+import React, { createContext, useContext, useReducer, Dispatch } from "react";
 import {
   ConfigDataActionType,
   ConfigDataContextType,
-} from '../types/ConfigDataContextType';
+} from "../types/ConfigDataContextType";
 
 const initData = {
   decimal: 0,
-  height: 0,
-  width: 0,
-  characterFontWidth: 0,
+  characterFontWidth: 7.8,
+  canvasWidth: 0,
+  canvasHeight: 0,
 };
 const ConfigDataContext = createContext<ConfigDataContextType>(initData);
 const ConfigDispatchContext = createContext<Dispatch<ConfigDataActionType>>(
-  () => {}
+  () => {},
 );
 
 function dataReducer(
   state: ConfigDataContextType,
-  action: ConfigDataActionType
+  action: ConfigDataActionType,
 ) {
-  if (action.type === 'changeContainerDimension') {
-    let newState = state;
-    state.width = action.containerWidth;
-    state.height = action.containerHeight;
+  if (action.type === "changeDiagramDimension") {
+    let newState = { ...state };
+    newState.canvasHeight = action.canvasHeight;
+    newState.canvasWidth = action.canvasWidth;
+    return newState;
+  } else if (action.type === "changeDecimal") {
+    let newState = { ...state };
+    newState.decimal = action.decimal;
     return newState;
   } else {
     return state;

@@ -1,24 +1,17 @@
 export type ConfigDataContextType = {
-  width: number;
-  height: number;
-  diagramWidth?: number;
-  diagramHeight?: number;
+  canvasWidth?: number;
+  canvasHeight?: number;
   decimal: number;
   characterFontWidth: number;
 };
 
 export type ConfigDataActionType =
   | {
-      type: 'changeDiagramDimension';
-      diagramWidth: number;
-      diagramHeight: number;
+      type: "changeDiagramDimension";
+      canvasWidth: number;
+      canvasHeight: number;
     }
   | {
-      type: 'changeContainerDimension';
-      containerWidth: number;
-      containerHeight: number;
-    }
-  | {
-      type: 'changeDecimal';
+      type: "changeDecimal";
       decimal: number;
     };
