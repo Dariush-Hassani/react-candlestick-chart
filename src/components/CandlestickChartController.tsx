@@ -8,6 +8,9 @@ import {
 import * as d3 from "d3";
 import dataType from "../types/DataType";
 import { dataNormalizer } from "../utils/helperFunctions";
+import CandlesCanvas from "./CandlesCanvas";
+import CandlesSelector from "./CandlesSelector";
+import SelectedCandleDataViewer from "./SelectedCandleDataViewer";
 
 const CandlestickChartController: React.FC<{
   chartData: any;
@@ -65,7 +68,9 @@ const CandlestickChartController: React.FC<{
       width={width}
       height={height}
     >
-      <div></div>
+      <SelectedCandleDataViewer />
+      <CandlesCanvas />
+      <CandlesSelector />
     </Layout>
   );
 };
