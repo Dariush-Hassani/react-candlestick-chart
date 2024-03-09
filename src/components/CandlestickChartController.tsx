@@ -69,7 +69,9 @@ const CandlestickChartController: React.FC<{
       height={height}
     >
       <SelectedCandleDataViewer />
-      <CandlesCanvas />
+      <foreignObject>
+        <CandlesCanvas />
+      </foreignObject>
       <CandlesSelector />
     </Layout>
   );
