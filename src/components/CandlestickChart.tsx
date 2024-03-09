@@ -2,6 +2,7 @@ import React from "react";
 import CandlestickChartController from "./CandlestickChartController";
 import { ConfigDataProvider } from "../context/ConfigtDataContext";
 import { DataProvider } from "../context/DataContext";
+import { DataViewerAndSelectorsProvider } from "../context/DataViewerAndSelectorsContext";
 
 const CandlestickChart: React.FC<{
   data: any;
@@ -13,13 +14,15 @@ const CandlestickChart: React.FC<{
   return (
     <DataProvider>
       <ConfigDataProvider>
-        <CandlestickChartController
-          chartData={data}
-          id={id}
-          width={width}
-          height={height}
-          decimal={decimal}
-        />
+        <DataViewerAndSelectorsProvider>
+          <CandlestickChartController
+            chartData={data}
+            id={id}
+            width={width}
+            height={height}
+            decimal={decimal}
+          />
+        </DataViewerAndSelectorsProvider>
       </ConfigDataProvider>
     </DataProvider>
   );
