@@ -80,3 +80,22 @@ export const calculateCandleWidthDate = (
   let width = times[indexes[1]] - times[indexes[0]];
   return [width - 0.3 * width, width];
 };
+
+export const getCursorPoint = (
+  id: string,
+  evt: MouseEvent,
+): { x: number; y: number } => {
+  let canvas: HTMLCanvasElement = document.querySelector(
+    `#${id}`,
+  ) as HTMLCanvasElement;
+  let rect: DOMRect = canvas.getBoundingClientRect(),
+    root = document.documentElement;
+
+  // return relative mouse position
+  let mouseX: number = evt.clientX - rect.left - root.scrollLeft;
+  let mouseY: number = evt.clientY - rect.top - root.scrollTop;
+  return {
+    x: mouseX,
+    y: mouseY,
+  };
+};

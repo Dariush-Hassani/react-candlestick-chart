@@ -1,6 +1,6 @@
 import { useData, useDataDispatch } from "../context/DataContext";
 import Layout from "./Layout";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 import {
   useConfigData,
   useConfigDispatch,
@@ -9,8 +9,13 @@ import * as d3 from "d3";
 import dataType from "../types/DataType";
 import { dataNormalizer } from "../utils/helperFunctions";
 import CandlesCanvas from "./CandlesCanvas";
-import CandlesSelector from "./CandlesSelector";
+import CandlesSelectorLines from "./CandlesSelectorLines";
 import SelectedCandleDataViewer from "./SelectedCandleDataViewer";
+import { DataActionType, DataContextType } from "../types/DataContextType";
+import {
+  ConfigDataActionType,
+  ConfigDataContextType,
+} from "../types/ConfigDataContextType";
 
 const CandlestickChartController: React.FC<{
   chartData: any;
@@ -19,10 +24,12 @@ const CandlestickChartController: React.FC<{
   height: number;
   decimal?: number;
 }> = ({ chartData, id, width, height, decimal }) => {
-  const dispatchData = useDataDispatch();
-  const dispatchConfig = useConfigDispatch();
-  const data = useData();
-  const config = useConfigData();
+  const dispatchData: Dispatch<DataActionType> = useDataDispatch();
+  const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
+  const data: DataContextType = useData();
+  const config: ConfigDataContextType = useConfigData();
+  const candlesCanvasId = `${id}-candles-canvas`;
+
   const [yScaleFunction, setYScaleFunction] = useState<any>(null);
   const [xScaleFunction, setXScaleFunction] = useState<any>(null);
 
@@ -69,10 +76,10 @@ const CandlestickChartController: React.FC<{
       height={height}
     >
       <SelectedCandleDataViewer />
-      <foreignObject>
-        <CandlesCanvas />
+      <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
+        <CandlesCanvas id={candlesCanvasId} />
       </foreignObject>
-      <CandlesSelector />
+      <CandlesSelectorLines candlesCanvasId={candlesCanvasId} />
     </Layout>
   );
 };

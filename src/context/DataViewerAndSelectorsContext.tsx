@@ -3,10 +3,6 @@ import {
   DataViewerAndSelectorsContextType,
 } from "../types/DataViewerAndSelectorsContextType";
 import React, { createContext, Dispatch, useContext, useReducer } from "react";
-import {
-  ConfigDataActionType,
-  ConfigDataContextType,
-} from "../types/ConfigDataContextType";
 
 const initData: DataViewerAndSelectorsContextType = {
   cursorLocation: {
@@ -54,10 +50,10 @@ export const DataViewerAndSelectorsProvider: React.FC<{
   );
 };
 
-export function usedataViewerAndSelectors() {
+export function useDataViewerAndSelectors() {
   return useContext(DataViewerAndSelectorsContext);
 }
 
-export function useConfigDispatch() {
+export function useDataViewerAndSelectorsDispatch() {
   return useContext(DataViewerAndSelectorsDispatchContext);
 }

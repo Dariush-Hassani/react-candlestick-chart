@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Dispatch, useEffect } from "react";
 import { useData } from "../context/DataContext";
 import {
   useConfigData,
@@ -6,6 +6,11 @@ import {
 } from "../context/ConfigtDataContext";
 import * as d3 from "d3";
 import { colors } from "../utils/Colors";
+import {
+  ConfigDataActionType,
+  ConfigDataContextType,
+} from "../types/ConfigDataContextType";
+import { DataContextType } from "../types/DataContextType";
 
 const Layout: React.FC<{
   id: string;
@@ -14,13 +19,13 @@ const Layout: React.FC<{
   children: React.ReactNode;
   xScaleFunction: any;
   yScaleFunction: any;
-}> = ({ id, width, height, yScaleFunction, xScaleFunction }) => {
+}> = ({ id, width, height, yScaleFunction, xScaleFunction, children }) => {
   const yAxisId = `${id}-yAxis`;
   const xAxisId = `${id}-xAxis`;
-  const data = useData();
 
-  const config = useConfigData();
-  const dispatchConfig = useConfigDispatch();
+  const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
+  const data: DataContextType = useData();
+  const config: ConfigDataContextType = useConfigData();
 
   const paddingLeft = 25;
   const paddingTop = 10;
@@ -87,6 +92,7 @@ const Layout: React.FC<{
       >
         <g id={`${yAxisId}`}></g>
         <g id={`${xAxisId}`}></g>
+        {children}
       </svg>
     </div>
   );
