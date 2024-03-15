@@ -5,7 +5,7 @@ import { useConfigData } from "../context/ConfigtDataContext";
 import { colors } from "../utils/Colors";
 import { DataContextType } from "../types/DataContextType";
 import { useData } from "../context/DataContext";
-const CandlesSelectorLines: React.FC<{
+const CandlesSelectorLinesAndLabels: React.FC<{
   candlesCanvasId: string;
   chartId: string;
   xScaleFunction: any;
@@ -120,4 +120,4 @@ const CandlesSelectorLines: React.FC<{
   );
 };
 
-export default CandlesSelectorLines;
+export default CandlesSelectorLinesAndLabels;

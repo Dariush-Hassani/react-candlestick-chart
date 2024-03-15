@@ -9,7 +9,7 @@ import * as d3 from "d3";
 import dataType from "../types/DataType";
 import { dataNormalizer } from "../utils/helperFunctions";
 import CandlesCanvas from "./CandlesCanvas";
-import CandlesSelectorLines from "./CandlesSelectorLines";
+import CandlesSelectorLinesAndLabels from "./CandlesSelectorLinesAndLabels";
 import SelectedCandleDataViewer from "./SelectedCandleDataViewer";
 import { DataActionType, DataContextType } from "../types/DataContextType";
 import {
@@ -77,9 +77,13 @@ const CandlestickChartController: React.FC<{
     >
       <SelectedCandleDataViewer />
       <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
-        <CandlesCanvas id={candlesCanvasId} />
+        <CandlesCanvas
+          id={candlesCanvasId}
+          xScaleFunction={xScaleFunction}
+          yScaleFunction={yScaleFunction}
+        />
       </foreignObject>
-      <CandlesSelectorLines
+      <CandlesSelectorLinesAndLabels
         xScaleFunction={xScaleFunction}
         yScaleFunction={yScaleFunction}
         chartId={id}
