@@ -9,21 +9,17 @@ const CandlesSelectorLines: React.FC<{
   chartId: string;
 }> = ({ candlesCanvasId, chartId }) => {
   const [showLines, setShowsLines] = useState<boolean>(false);
+  const [positionX, setPositionX] = useState<number>(0);
+  const [positionY, setPositionY] = useState<number>(0);
   const priceViewerLineId = "priceViewerLine";
   const dateViewerLineId = "dateViewerLine";
   const config: ConfigDataContextType = useConfigData();
 
-  const priceLineHandler = (positionY: number) => {
-    d3.select(`#${priceViewerLineId}`)
-      .attr("x1", 0)
-      .attr("y1", positionY)
-      .attr("x2", config.canvasWidth as number)
-      .attr("y2", positionY);
-  };
   const mouseMove = (evt: MouseEvent) => {
     setShowsLines(true);
     let point = getCursorPoint(candlesCanvasId, evt);
-    priceLineHandler(point.y);
+    setPositionX(point.x);
+    setPositionY(point.y);
   };
 
   const mouseLeave = () => {
@@ -31,8 +27,6 @@ const CandlesSelectorLines: React.FC<{
   };
 
   useEffect(() => {
-    if (config.canvasWidth === 0) return;
-
     let canvas: HTMLCanvasElement = document.querySelector(
       `#${candlesCanvasId}`,
     ) as HTMLCanvasElement;
@@ -46,7 +40,7 @@ const CandlesSelectorLines: React.FC<{
       canvas.removeEventListener("mouseleave", mouseLeave);
       mainSvgChart.removeEventListener("mouseleave", mouseLeave);
     };
-  }, [config.canvasWidth]);
+  }, []);
 
   return (
     <>
@@ -58,6 +52,10 @@ const CandlesSelectorLines: React.FC<{
             id={dateViewerLineId}
           ></line>
           <line
+            x1={0}
+            y1={positionY}
+            x2={config.canvasWidth}
+            y2={positionY}
             strokeDasharray={"2,2"}
             stroke={colors.selectorLine}
             id={priceViewerLineId}
