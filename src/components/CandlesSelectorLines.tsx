@@ -69,9 +69,10 @@ const CandlesSelectorLines: React.FC<{
           : positionY - priceLabelHeight / 2;
     setPriceLabelTranslateY(translateY);
 
-    let priceLabelValue = yScaleFunction?.invert(positionY).toFixed(1) ?? 0;
+    let priceLabelValue =
+      yScaleFunction?.invert(positionY).toFixed(config.decimal) ?? 0;
     setPriceLabelValue(priceLabelValue);
-  }, [positionY]);
+  }, [positionY, config.decimal]);
 
   return (
     <>
