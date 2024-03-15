@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect } from "react";
+import React, { Dispatch, useEffect, useMemo } from "react";
 import { useData } from "../context/DataContext";
 import {
   useConfigData,
@@ -30,10 +30,13 @@ const Layout: React.FC<{
   const paddingLeft = 25;
   const paddingTop = 10;
   const paddingBottom = 30;
-  const paddingRight =
-    2.5 +
-    data.minMaxInitPrice.max.toFixed(config.decimal).toString().length *
-      config.characterFontWidth;
+  const paddingRight = useMemo(
+    () =>
+      2.5 +
+      data.minMaxInitPrice.max.toFixed(config.decimal).toString().length *
+        config.characterFontWidth,
+    [data.minMaxInitPrice.max, config.decimal],
+  );
 
   useEffect(() => {
     if (width !== 0 && height !== 0) {
