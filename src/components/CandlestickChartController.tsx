@@ -79,7 +79,7 @@ const CandlestickChartController: React.FC<{
       <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
         <CandlesCanvas id={candlesCanvasId} />
       </foreignObject>
-      <CandlesSelectorLines candlesCanvasId={candlesCanvasId} />
+      <CandlesSelectorLines chartId={id} candlesCanvasId={candlesCanvasId} />
     </Layout>
   );
 };

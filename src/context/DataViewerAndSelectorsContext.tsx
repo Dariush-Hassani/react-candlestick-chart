@@ -5,10 +5,6 @@ import {
 import React, { createContext, Dispatch, useContext, useReducer } from "react";
 
 const initData: DataViewerAndSelectorsContextType = {
-  cursorLocation: {
-    x: 0,
-    y: 0,
-  },
   lockOnCandle: false,
 };
 
@@ -22,12 +18,7 @@ function dataViewerAndSelectorsReducer(
   state: DataViewerAndSelectorsContextType,
   action: DataViewerAndSelectorsActionType,
 ) {
-  if (action.type === "changeLocation") {
-    let newState = { ...state };
-    newState.cursorLocation.x = action.x;
-    newState.cursorLocation.y = action.y;
-    return newState;
-  } else if (action.type === "changeLockOnCandle") {
+  if (action.type === "changeLockOnCandle") {
     let newState = { ...state };
     newState.lockOnCandle = action.lockOnCandle;
     return newState;
