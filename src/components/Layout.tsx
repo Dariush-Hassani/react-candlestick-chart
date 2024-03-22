@@ -60,7 +60,7 @@ const Layout: React.FC<{
       d3.selectAll(`#${yAxisId} .tick line`).style("stroke", colors.grid);
       d3.selectAll(`#${yAxisId} .tick text`).style("fill", colors.tick);
     }
-  }, [yScaleFunction]);
+  }, [yScaleFunction, config.canvasWidth, config.canvasHeight]);
 
   useEffect(() => {
     if (xScaleFunction) {
@@ -75,7 +75,7 @@ const Layout: React.FC<{
       d3.selectAll(`#${xAxisId} .tick line`).style("stroke", colors.grid);
       d3.selectAll(`#${xAxisId} .tick text`).style("fill", colors.tick);
     }
-  }, [xScaleFunction]);
+  }, [xScaleFunction, config.canvasWidth, config.canvasHeight]);
 
   return (
     <div

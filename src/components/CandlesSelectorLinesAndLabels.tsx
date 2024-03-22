@@ -72,7 +72,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     let priceLabelValue =
       yScaleFunction?.invert(positionY).toFixed(config.decimal) ?? 0;
     setPriceLabelValue(priceLabelValue);
-  }, [positionY, config.decimal]);
+  }, [positionY, config.decimal, config.canvasWidth, config.canvasHeight]);
 
   return (
     <>
