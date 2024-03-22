@@ -1,7 +1,7 @@
 export type DataViewerAndSelectorsContextType = {
-  lockOnCandle: boolean;
+  candleIndex: number;
 };
 export type DataViewerAndSelectorsActionType = {
-  type: "changeLockOnCandle";
-  lockOnCandle: boolean;
+  type: "changeCandleIndex";
+  candleIndex: number;
 };

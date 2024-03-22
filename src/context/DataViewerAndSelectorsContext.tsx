@@ -5,7 +5,7 @@ import {
 import React, { createContext, Dispatch, useContext, useReducer } from "react";
 
 const initData: DataViewerAndSelectorsContextType = {
-  lockOnCandle: false,
+  candleIndex: -1,
 };
 
 const DataViewerAndSelectorsContext =
@@ -18,9 +18,9 @@ function dataViewerAndSelectorsReducer(
   state: DataViewerAndSelectorsContextType,
   action: DataViewerAndSelectorsActionType,
 ) {
-  if (action.type === "changeLockOnCandle") {
+  if (action.type === "changeCandleIndex") {
     let newState = { ...state };
-    newState.lockOnCandle = action.lockOnCandle;
+    newState.candleIndex = action.candleIndex;
     return newState;
   } else {
     return state;

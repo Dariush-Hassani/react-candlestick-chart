@@ -5,6 +5,7 @@ import { useConfigData } from "../context/ConfigtDataContext";
 import { colors } from "../utils/Colors";
 import { DataContextType } from "../types/DataContextType";
 import { useData } from "../context/DataContext";
+import * as d3 from "d3";
 const CandlesSelectorLinesAndLabels: React.FC<{
   candlesCanvasId: string;
   chartId: string;
@@ -15,6 +16,8 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   const dateViewerLineId = "dateViewerLine";
   const charWidth = 7.8;
   const priceLabelHeight = 25;
+  const dateLabelWidth = 150;
+  const dateLabelHeight = 25;
 
   const config: ConfigDataContextType = useConfigData();
   const data: DataContextType = useData();
@@ -32,6 +35,9 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     [config.decimal, data.minMaxInitPrice.max],
   );
   const [priceLabelValue, setPriceLabelValue] = useState<number>(0);
+
+  const [dateLabelTranslateX, setDateLabelTranslateX] = useState<number>(0);
+  const [dateLabelValue, setDateLabelValue] = useState<string>("");
 
   const mouseMove = (evt: MouseEvent) => {
     setShowsLines(true);
@@ -61,18 +67,37 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   }, []);
 
   useEffect(() => {
-    let translateY =
-      positionY >= (config.canvasHeight as number) - priceLabelHeight / 2
-        ? (config.canvasHeight as number) - priceLabelHeight
-        : positionY <= priceLabelHeight / 2
-          ? 0
-          : positionY - priceLabelHeight / 2;
-    setPriceLabelTranslateY(translateY);
+    if (config.canvasWidth && config.canvasHeight) {
+      let translateY =
+        positionY >= (config.canvasHeight as number) - priceLabelHeight / 2
+          ? (config.canvasHeight as number) - priceLabelHeight
+          : positionY <= priceLabelHeight / 2
+            ? 0
+            : positionY - priceLabelHeight / 2;
+      setPriceLabelTranslateY(translateY);
 
-    let priceLabelValue =
-      yScaleFunction?.invert(positionY).toFixed(config.decimal) ?? 0;
-    setPriceLabelValue(priceLabelValue);
+      let priceLabelValue =
+        yScaleFunction?.invert(positionY).toFixed(config.decimal) ?? 0;
+      setPriceLabelValue(priceLabelValue);
+    }
   }, [positionY, config.decimal, config.canvasWidth, config.canvasHeight]);
+
+  useEffect(() => {
+    if (config.canvasWidth && config.canvasHeight) {
+      let translateX =
+        positionX >= (config.canvasWidth as number) - dateLabelWidth / 2
+          ? (config.canvasWidth as number) - dateLabelWidth
+          : positionX <= dateLabelWidth / 2
+            ? 0
+            : positionX - dateLabelWidth / 2;
+      setDateLabelTranslateX(translateX);
+
+      let dateLabelValue = d3.timeFormat("%a %d %b '%y %H:%M")(
+        xScaleFunction.invert(positionX),
+      );
+      setDateLabelValue(dateLabelValue);
+    }
+  }, [positionX, config.decimal, config.canvasWidth, config.canvasHeight]);
 
   return (
     <>
@@ -82,6 +107,10 @@ const CandlesSelectorLinesAndLabels: React.FC<{
             strokeDasharray={"2,2"}
             stroke={colors.selectorLine}
             id={dateViewerLineId}
+            x1={positionX}
+            y1={0}
+            x2={positionX}
+            y2={config.canvasHeight}
           ></line>
           <line
             x1={0}
@@ -110,6 +139,26 @@ const CandlesSelectorLinesAndLabels: React.FC<{
               y={15}
             >
               {priceLabelValue}
+            </text>
+          </g>
+          <g
+            transform={`translate(${dateLabelTranslateX},${config.canvasHeight})`}
+          >
+            <rect
+              fill={colors.selectorLabelBackground}
+              width={dateLabelWidth}
+              height={dateLabelHeight}
+            ></rect>
+            <text
+              style={{
+                fontSize: "12px",
+                fill: colors.selectorLabelText,
+                fontFamily: "monospace",
+              }}
+              x={5}
+              y={15}
+            >
+              {dateLabelValue}
             </text>
           </g>
         </>
