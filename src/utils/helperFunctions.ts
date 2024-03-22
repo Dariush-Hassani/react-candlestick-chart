@@ -1,4 +1,5 @@
 import DataType from "../types/DataType";
+import dataType from "../types/DataType";
 
 export const dateArrayNormalizer = (data: (string | number)[]): number[] => {
   try {
@@ -98,4 +99,51 @@ export const getCursorPoint = (
     x: mouseX,
     y: mouseY,
   };
+};
+
+// export const findCandleIndex = (inpArray: number[], key: number): number => {
+//   let lowIndex = 0;
+//   let highIndex = inpArray.length - 1;
+//   let midIndex = Math.floor((highIndex + lowIndex) / 2);
+//   while (true) {
+//     if (key === inpArray[midIndex]) return midIndex;
+//
+//     if (lowIndex >= highIndex) {
+//       return -1;
+//     } else if (key > inpArray[midIndex]) {
+//       lowIndex = midIndex + 1;
+//       midIndex = Math.floor((highIndex + lowIndex) / 2);
+//     } else if (key < inpArray[midIndex]) {
+//       highIndex = midIndex - 1;
+//       midIndex = Math.floor((highIndex + lowIndex) / 2);
+//     }
+//   }
+// };
+
+export const findCandleIndex = (
+  inpArray: dataType[],
+  candleLockerWidthDate: number,
+  keyDate: number,
+): number => {
+  let lowIndex = 0;
+  let highIndex = inpArray.length - 1;
+  let midIndex = Math.floor((highIndex + lowIndex) / 2);
+  while (true) {
+    if (
+      keyDate === inpArray[midIndex].date ||
+      (keyDate <= inpArray[midIndex].date + candleLockerWidthDate / 2 &&
+        keyDate >= inpArray[midIndex].date - candleLockerWidthDate / 2)
+    )
+      return midIndex;
+
+    if (lowIndex >= highIndex) {
+      return -1;
+    } else if (keyDate > inpArray[midIndex].date + candleLockerWidthDate / 2) {
+      lowIndex = midIndex + 1;
+      midIndex = Math.floor((highIndex + lowIndex) / 2);
+    } else if (keyDate < inpArray[midIndex].date - candleLockerWidthDate / 2) {
+      highIndex = midIndex - 1;
+      midIndex = Math.floor((highIndex + lowIndex) / 2);
+    }
+  }
 };

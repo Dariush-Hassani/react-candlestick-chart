@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { getCursorPoint } from "../utils/helperFunctions";
+import { findCandleIndex, getCursorPoint } from "../utils/helperFunctions";
 import { ConfigDataContextType } from "../types/ConfigDataContextType";
 import { useConfigData } from "../context/ConfigtDataContext";
 import { colors } from "../utils/Colors";
@@ -38,6 +38,8 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
   const [dateLabelTranslateX, setDateLabelTranslateX] = useState<number>(0);
   const [dateLabelValue, setDateLabelValue] = useState<string>("");
+
+  const [dateLinePosition, setDateLinePosition] = useState<number>(0);
 
   const mouseMove = (evt: MouseEvent) => {
     setShowsLines(true);
@@ -84,16 +86,28 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
   useEffect(() => {
     if (config.canvasWidth && config.canvasHeight) {
+      let selectedCandleIndex = findCandleIndex(
+        data.shownData,
+        data.candleLockerWidthDate,
+        xScaleFunction.invert(positionX).getTime(),
+      );
+      let posX =
+        selectedCandleIndex === -1
+          ? positionX
+          : xScaleFunction(data.shownData[selectedCandleIndex].date);
+
+      setDateLinePosition(posX);
+
       let translateX =
-        positionX >= (config.canvasWidth as number) - dateLabelWidth / 2
+        posX >= (config.canvasWidth as number) - dateLabelWidth / 2
           ? (config.canvasWidth as number) - dateLabelWidth
-          : positionX <= dateLabelWidth / 2
+          : posX <= dateLabelWidth / 2
             ? 0
-            : positionX - dateLabelWidth / 2;
+            : posX - dateLabelWidth / 2;
       setDateLabelTranslateX(translateX);
 
       let dateLabelValue = d3.timeFormat("%a %d %b '%y %H:%M")(
-        xScaleFunction.invert(positionX),
+        xScaleFunction.invert(posX),
       );
       setDateLabelValue(dateLabelValue);
     }
@@ -107,9 +121,9 @@ const CandlesSelectorLinesAndLabels: React.FC<{
             strokeDasharray={"2,2"}
             stroke={colors.selectorLine}
             id={dateViewerLineId}
-            x1={positionX}
+            x1={dateLinePosition}
             y1={0}
-            x2={positionX}
+            x2={dateLinePosition}
             y2={config.canvasHeight}
           ></line>
           <line
