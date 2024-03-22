@@ -79,16 +79,16 @@ function dataReducer(state: DataContextType, action: DataActionType) {
         initData: newInitData,
         shownData: newInitData,
         minMaxInitDate: {
-          min: normalizeInitDates[0] as number,
-          max: normalizeInitDates[lastIndex] as number,
+          min: (normalizeInitDates[0] - candleWidth / 2) as number,
+          max: (normalizeInitDates[lastIndex] + candleWidth / 2) as number,
         },
         minMaxShownDate: {
-          min: normalizeInitDates[0] as number,
-          max: normalizeInitDates[lastIndex] as number,
+          min: (normalizeInitDates[0] - candleWidth / 2) as number,
+          max: (normalizeInitDates[lastIndex] + candleWidth / 2) as number,
         },
         shownRange: {
-          start: normalizeInitDates[0] as number,
-          end: normalizeInitDates[lastIndex] as number,
+          start: (normalizeInitDates[0] - candleWidth / 2) as number,
+          end: (normalizeInitDates[lastIndex] + candleWidth / 2) as number,
         },
         minMaxInitPrice: {
           min: newMinMaxInitPrice[0] as number,
