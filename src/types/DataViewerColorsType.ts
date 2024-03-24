@@ -3,8 +3,8 @@ export type DataViewerColorsType = {
   shortPositionData: string;
   longPositionLabel: string;
   longPositionData: string;
-  StopLossLabel: string;
-  StopLossData: string;
+  stopLossLabel: string;
+  stopLossData: string;
   takeProfitLabel: string;
   takeProfitData: string;
   openLabel: string;

@@ -1,7 +1,7 @@
 export type DataViewerTextsType = {
   shortPosition: string;
   longPosition: string;
-  StopLoss: string;
+  stopLoss: string;
   takeProfit: string;
   open: string;
   high: string;

@@ -36,7 +36,7 @@ const CandlestickChart: React.FC<{
             dataViewerTexts={{
               shortPosition: dataViewerTexts?.shortPosition ?? "Short",
               longPosition: dataViewerTexts?.longPosition ?? "Long",
-              StopLoss: dataViewerTexts?.StopLoss ?? "sl",
+              stopLoss: dataViewerTexts?.stopLoss ?? "sl",
               takeProfit: dataViewerTexts?.takeProfit ?? "tp",
               open: dataViewerTexts?.open ?? "O",
               high: dataViewerTexts?.high ?? "H",
@@ -50,8 +50,8 @@ const CandlestickChart: React.FC<{
               longPositionLabel:
                 dataViewerColors?.longPositionLabel ?? "#b2b5be",
               longPositionData: dataViewerColors?.longPositionData ?? "#fff",
-              StopLossLabel: dataViewerColors?.StopLossLabel ?? "#b2b5be",
-              StopLossData: dataViewerColors?.StopLossData ?? "#F9DB04",
+              stopLossLabel: dataViewerColors?.stopLossLabel ?? "#b2b5be",
+              stopLossData: dataViewerColors?.stopLossData ?? "#F9DB04",
               takeProfitLabel: dataViewerColors?.takeProfitLabel ?? "#b2b5be",
               takeProfitData: dataViewerColors?.takeProfitData ?? "#04F5F9",
               openLabel: dataViewerColors?.openLabel ?? "#b2b5be",
