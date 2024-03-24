@@ -6,4 +6,8 @@ export const colors = {
   selectorLabelText: "#b2b5be",
   greenCandle: "#089981",
   redCandle: "#e13443",
+  longPosition: "#fff",
+  shortPosition: "#fff",
+  sl: "#F9DB04",
+  tp: "#04F5F9",
 };

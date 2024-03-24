@@ -31,12 +31,10 @@ export const dataNormalizer = (data: any[]): DataType[] => {
       }
       if (
         x.position &&
-        (!x.position.sl ||
-          !x.position.tp ||
-          !x.position.positionType ||
+        (!x.position.positionType ||
           !x.position.positionValue ||
-          typeof x.position.sl !== "number" ||
-          typeof x.position.tp !== "number" ||
+          (x.position.sl && typeof x.position.sl !== "number") ||
+          (x.position.tp && typeof x.position.tp !== "number") ||
           typeof x.position.positionType !== "string" ||
           (x.position.positionType !== "long" &&
             x.position.positionType !== "short") ||
@@ -54,8 +52,8 @@ export const dataNormalizer = (data: any[]): DataType[] => {
           ? {
               sl: x?.position?.sl,
               tp: x?.position?.tp,
-              positionType: x?.positionType,
-              positionValue: x.positionValue,
+              positionType: x?.position?.positionType,
+              positionValue: x?.position?.positionValue,
             }
           : undefined,
       });

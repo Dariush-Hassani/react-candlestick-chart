@@ -62,8 +62,6 @@ const data = [
     close: 172.23,
     position: {
       positionType: "long",
-      sl: 170,
-      tp: 178,
       positionValue: 174,
     },
   },

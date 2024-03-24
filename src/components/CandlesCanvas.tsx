@@ -3,7 +3,6 @@ import { ConfigDataContextType } from "../types/ConfigDataContextType";
 import { useConfigData } from "../context/ConfigtDataContext";
 import { DataContextType } from "../types/DataContextType";
 import { useData } from "../context/DataContext";
-import DataType from "../types/DataType";
 import dataType from "../types/DataType";
 import { colors } from "../utils/Colors";
 
@@ -17,11 +16,9 @@ const CandlesCanvas: React.FC<{
   const context2D = useRef<CanvasRenderingContext2D | null>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
 
-  const createCandle = (
-    candleWidth: number,
-    candleLockerWidth: number,
-    candleData: dataType,
-  ) => {
+  const createCandle = (candleWidth: number, candleData: dataType) => {
+    let ctx = context2D.current as CanvasRenderingContext2D;
+
     //candle body
     let width = candleWidth;
     let height =
@@ -55,12 +52,80 @@ const CandlesCanvas: React.FC<{
       candleData.open > candleData.close
         ? colors.greenCandle
         : colors.redCandle;
-    let ctx = context2D.current as CanvasRenderingContext2D;
 
     ctx.fillStyle = color;
     ctx.strokeStyle = color;
     ctx.stroke(candle);
     ctx.fill(candle);
+
+    //position / sl / tp
+    if (candleData.position) {
+      let position = new Path2D();
+      if (candleData.position.positionType === "long") {
+        //long position
+        position.moveTo(
+          xScaleFunction(candleData.date) - candleWidth / 2,
+          yScaleFunction(candleData.position.positionValue),
+        );
+        position.lineTo(
+          xScaleFunction(candleData.date) + candleWidth / 2,
+          yScaleFunction(candleData.position.positionValue),
+        );
+        position.lineTo(
+          xScaleFunction(candleData.date),
+          yScaleFunction(candleData.position.positionValue) - candleWidth / 1.5,
+        );
+        ctx.fillStyle = colors.longPosition;
+        ctx.strokeStyle = colors.longPosition;
+      } else if (candleData.position.positionType === "short") {
+        position.moveTo(
+          xScaleFunction(candleData.date) - candleWidth / 2,
+          yScaleFunction(candleData.position.positionValue),
+        );
+        position.lineTo(
+          xScaleFunction(candleData.date) + candleWidth / 2,
+          yScaleFunction(candleData.position.positionValue),
+        );
+        position.lineTo(
+          xScaleFunction(candleData.date),
+          yScaleFunction(candleData.position.positionValue) + candleWidth / 1.5,
+        );
+        ctx.fillStyle = colors.shortPosition;
+        ctx.strokeStyle = colors.shortPosition;
+      }
+      ctx.stroke(position);
+      ctx.fill(position);
+
+      //sl
+      if (candleData.position.sl) {
+        let sl = new Path2D();
+        sl.rect(
+          xScaleFunction(candleData.date) - candleWidth / 1.2,
+          yScaleFunction(candleData.position.sl),
+          candleWidth * 1.6,
+          3,
+        );
+        ctx.fillStyle = colors.sl;
+        ctx.strokeStyle = colors.sl;
+        ctx.stroke(sl);
+        ctx.fill(sl);
+      }
+
+      //tp
+      if (candleData.position.tp) {
+        let tp = new Path2D();
+        tp.rect(
+          xScaleFunction(candleData.date) - candleWidth / 1.2,
+          yScaleFunction(candleData.position.tp),
+          candleWidth * 1.6,
+          3,
+        );
+        ctx.fillStyle = colors.tp;
+        ctx.strokeStyle = colors.tp;
+        ctx.stroke(tp);
+        ctx.fill(tp);
+      }
+    }
   };
 
   useLayoutEffect(() => {
@@ -69,13 +134,13 @@ const CandlesCanvas: React.FC<{
     }
   }, [canvas.current]);
 
-  const [candleLockerWidth, candleWidth] = useMemo<number[]>(() => {
-    if (!xScaleFunction || !yScaleFunction) return [0, 0];
+  const candleWidth = useMemo<number>(() => {
+    if (!xScaleFunction || !yScaleFunction) return 0;
 
     let lockerWidth: number =
       xScaleFunction(data.minMaxShownDate.min + data.candleLockerWidthDate) -
       xScaleFunction(data.minMaxShownDate.min);
-    return [lockerWidth, lockerWidth - 0.3 * lockerWidth];
+    return lockerWidth - 0.3 * lockerWidth;
   }, [
     data.candleLockerWidthDate,
     data.candleWidthDate,
@@ -88,9 +153,9 @@ const CandlesCanvas: React.FC<{
   useEffect(() => {
     if (context2D.current) {
       for (let i = 0; i < data.shownData.length; i++)
-        createCandle(candleWidth, candleLockerWidth, data.shownData[i]);
+        createCandle(candleWidth, data.shownData[i]);
     }
-  }, [context2D.current, candleLockerWidth, candleWidth, data.shownData]);
+  }, [context2D.current, candleWidth, data.shownData]);
 
   return (
     <canvas
