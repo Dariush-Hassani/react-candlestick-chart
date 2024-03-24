@@ -1,4 +1,5 @@
 export const colors = {
+  background: "rgba(0,0,0,0)", //transparent
   grid: "#222631",
   tick: "#b2b5be",
   selectorLine: "rgba(178,181,190,0.5)",

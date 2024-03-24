@@ -10,20 +10,31 @@ import dataType from "../types/DataType";
 import { dataNormalizer } from "../utils/helperFunctions";
 import CandlesCanvas from "./CandlesCanvas";
 import CandlesSelectorLinesAndLabels from "./CandlesSelectorLinesAndLabels";
-import SelectedCandleDataViewer from "./SelectedCandleDataViewer";
 import { DataActionType, DataContextType } from "../types/DataContextType";
 import {
   ConfigDataActionType,
   ConfigDataContextType,
 } from "../types/ConfigDataContextType";
+import { DataViewerColorsType } from "../types/DataViewerColorsType";
+import { DataViewerTextsType } from "../types/DataViewerTextsType";
 
 const CandlestickChartController: React.FC<{
   chartData: any;
   id: string;
   width: number;
   height: number;
-  decimal?: number;
-}> = ({ chartData, id, width, height, decimal }) => {
+  decimal: number;
+  dataViewerTexts: DataViewerTextsType;
+  dataViewerColors: DataViewerColorsType;
+}> = ({
+  chartData,
+  id,
+  width,
+  height,
+  decimal,
+  dataViewerTexts,
+  dataViewerColors,
+}) => {
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
   const data: DataContextType = useData();
@@ -42,7 +53,7 @@ const CandlestickChartController: React.FC<{
   useEffect(() => {
     dispatchConfig({
       type: "changeDecimal",
-      decimal: decimal ?? 0,
+      decimal: decimal,
     });
   }, [decimal]);
 
@@ -74,8 +85,10 @@ const CandlestickChartController: React.FC<{
       id={id}
       width={width}
       height={height}
+      dataViewerColors={dataViewerColors}
+      dataViewerTexts={dataViewerTexts}
+      decimal={decimal}
     >
-      <SelectedCandleDataViewer />
       <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
         <CandlesCanvas
           id={candlesCanvasId}

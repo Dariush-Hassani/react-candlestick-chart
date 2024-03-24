@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Dispatch, useEffect, useMemo, useState } from "react";
 import { findCandleIndex, getCursorPoint } from "../utils/helperFunctions";
 import { ConfigDataContextType } from "../types/ConfigDataContextType";
 import { useConfigData } from "../context/ConfigtDataContext";
@@ -6,6 +6,8 @@ import { colors } from "../utils/Colors";
 import { DataContextType } from "../types/DataContextType";
 import { useData } from "../context/DataContext";
 import * as d3 from "d3";
+import { useDataViewerAndSelectorsDispatch } from "../context/DataViewerAndSelectorsContext";
+import { DataViewerAndSelectorsActionType } from "../types/DataViewerAndSelectorsContextType";
 const CandlesSelectorLinesAndLabels: React.FC<{
   candlesCanvasId: string;
   chartId: string;
@@ -21,6 +23,8 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
   const config: ConfigDataContextType = useConfigData();
   const data: DataContextType = useData();
+  const dispatchDataViewer: Dispatch<DataViewerAndSelectorsActionType> =
+    useDataViewerAndSelectorsDispatch();
 
   const [showLines, setShowsLines] = useState<boolean>(false);
   const [positionX, setPositionX] = useState<number>(0);
@@ -50,6 +54,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
   const mouseLeave = () => {
     setShowsLines(false);
+    dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
   };
 
   useEffect(() => {
@@ -91,6 +96,12 @@ const CandlesSelectorLinesAndLabels: React.FC<{
         data.candleLockerWidthDate,
         xScaleFunction.invert(positionX).getTime(),
       );
+
+      dispatchDataViewer({
+        type: "changeCandleIndex",
+        candleIndex: selectedCandleIndex,
+      });
+
       let posX =
         selectedCandleIndex === -1
           ? positionX

@@ -11,6 +11,9 @@ import {
   ConfigDataContextType,
 } from "../types/ConfigDataContextType";
 import { DataContextType } from "../types/DataContextType";
+import SelectedCandleDataViewer from "./SelectedCandleDataViewer";
+import { DataViewerTextsType } from "../types/DataViewerTextsType";
+import { DataViewerColorsType } from "../types/DataViewerColorsType";
 
 const Layout: React.FC<{
   id: string;
@@ -19,7 +22,20 @@ const Layout: React.FC<{
   children: React.ReactNode;
   xScaleFunction: any;
   yScaleFunction: any;
-}> = ({ id, width, height, yScaleFunction, xScaleFunction, children }) => {
+  dataViewerTexts: DataViewerTextsType;
+  dataViewerColors: DataViewerColorsType;
+  decimal: number;
+}> = ({
+  id,
+  width,
+  height,
+  yScaleFunction,
+  xScaleFunction,
+  children,
+  dataViewerTexts,
+  dataViewerColors,
+  decimal,
+}) => {
   const yAxisId = `${id}-yAxis`;
   const xAxisId = `${id}-xAxis`;
 
@@ -86,8 +102,15 @@ const Layout: React.FC<{
         paddingLeft,
         paddingRight,
         display: "inline-block",
+        position: "relative",
+        background: colors.background,
       }}
     >
+      <SelectedCandleDataViewer
+        decimal={decimal}
+        dataViewerTexts={dataViewerTexts}
+        dataViewerColors={dataViewerColors}
+      />
       <svg
         width={config.canvasWidth}
         height={config.canvasHeight}

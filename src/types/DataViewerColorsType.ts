@@ -1,0 +1,22 @@
+export type DataViewerColorsType = {
+  shortPositionLabel: string;
+  shortPositionData: string;
+  longPositionLabel: string;
+  longPositionData: string;
+  StopLossLabel: string;
+  StopLossData: string;
+  takeProfitLabel: string;
+  takeProfitData: string;
+  openLabel: string;
+  openDataUp: string;
+  openDataDown: string;
+  highLabel: string;
+  highDataUp: string;
+  highDataDown: string;
+  lowLabel: string;
+  lowDataUp: string;
+  lowDataDown: string;
+  closeLabel: string;
+  closeDataUp: string;
+  closeDataDown: string;
+};
