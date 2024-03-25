@@ -152,6 +152,12 @@ const CandlesCanvas: React.FC<{
 
   useEffect(() => {
     if (context2D.current) {
+      context2D.current?.clearRect(
+        0,
+        0,
+        config.canvasWidth as number,
+        config.canvasHeight as number,
+      );
       for (let i = 0; i < data.shownData.length; i++)
         createCandle(candleWidth, data.shownData[i]);
     }
