@@ -171,15 +171,31 @@ function dataReducer(state: DataContextType, action: DataActionType) {
 
       let newShownRange = action.shownRange;
 
-      if (newShownRange.start < state.initData[0].date - oldCandleWidthDate / 2)
-        newShownRange.start = state.initData[0].date - oldCandleWidthDate / 2;
       if (
+        newShownRange.start < state.initData[0].date - oldCandleWidthDate / 2 ||
         newShownRange.end >
-        state.initData[state.initData.length - 1].date + oldCandleWidthDate / 2
-      )
-        newShownRange.end =
           state.initData[state.initData.length - 1].date +
-          oldCandleWidthDate / 2;
+            oldCandleWidthDate / 2
+      ) {
+        if (
+          newShownRange.start <
+          state.initData[0].date - oldCandleWidthDate / 2
+        ) {
+          newShownRange.start = state.initData[0].date - oldCandleWidthDate / 2;
+        }
+        if (
+          newShownRange.end >
+          state.initData[state.initData.length - 1].date +
+            oldCandleWidthDate / 2
+        ) {
+          newShownRange.end =
+            state.initData[state.initData.length - 1].date +
+            oldCandleWidthDate / 2;
+        }
+        newState.zoomFactor =
+          (state.minMaxInitDate.max - state.minMaxInitDate.min) /
+          (newShownRange.end - newShownRange.start);
+      }
 
       newState.shownRange = newShownRange;
 
