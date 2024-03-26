@@ -17,6 +17,7 @@ const CandlesCanvas: React.FC<{
   const canvas = useRef<HTMLCanvasElement>(null);
 
   const createCandle = (candleWidth: number, candleData: dataType) => {
+    if (Number.isNaN(candleWidth) || !candleWidth) return;
     let ctx = context2D.current as CanvasRenderingContext2D;
 
     //candle body
@@ -140,7 +141,7 @@ const CandlesCanvas: React.FC<{
     let lockerWidth: number =
       xScaleFunction(data.minMaxShownDate.min + data.candleLockerWidthDate) -
       xScaleFunction(data.minMaxShownDate.min);
-    return lockerWidth - 0.3 * lockerWidth;
+    return Number.isNaN(lockerWidth) ? 0 : lockerWidth - 0.3 * lockerWidth;
   }, [
     data.candleLockerWidthDate,
     data.candleWidthDate,
@@ -158,8 +159,10 @@ const CandlesCanvas: React.FC<{
         config.canvasWidth as number,
         config.canvasHeight as number,
       );
-      for (let i = 0; i < data.shownData.length; i++)
-        createCandle(candleWidth, data.shownData[i]);
+      if (data.shownData.length && !Number.isNaN(candleWidth)) {
+        for (let i = 0; i < data.shownData.length; i++)
+          createCandle(candleWidth, data.shownData[i]);
+      }
     }
   }, [context2D.current, candleWidth, data.shownData]);
 

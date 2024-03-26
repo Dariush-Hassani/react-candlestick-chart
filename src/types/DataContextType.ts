@@ -32,4 +32,9 @@ export type DataContextType = {
 
 export type DataActionType =
   | { type: "changeInitData"; initData: DataType[] }
-  | { type: "changeShownRange"; shownRange: { start: number; end: number } };
+  | { type: "changeShownRange"; shownRange: { start: number; end: number } }
+  | {
+      type: "changeZoom";
+      shownRange: { start: number; end: number };
+      zoomFactor: number;
+    };

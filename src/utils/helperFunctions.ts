@@ -128,18 +128,18 @@ export const findCandleIndex = (
   let midIndex = Math.floor((highIndex + lowIndex) / 2);
   while (true) {
     if (
-      keyDate === inpArray[midIndex].date ||
-      (keyDate <= inpArray[midIndex].date + candleLockerWidthDate / 2 &&
-        keyDate >= inpArray[midIndex].date - candleLockerWidthDate / 2)
+      keyDate === inpArray[midIndex]?.date ||
+      (keyDate <= inpArray[midIndex]?.date + candleLockerWidthDate / 2 &&
+        keyDate >= inpArray[midIndex]?.date - candleLockerWidthDate / 2)
     )
       return midIndex;
 
     if (lowIndex >= highIndex) {
       return -1;
-    } else if (keyDate > inpArray[midIndex].date + candleLockerWidthDate / 2) {
+    } else if (keyDate > inpArray[midIndex]?.date + candleLockerWidthDate / 2) {
       lowIndex = midIndex + 1;
       midIndex = Math.floor((highIndex + lowIndex) / 2);
-    } else if (keyDate < inpArray[midIndex].date - candleLockerWidthDate / 2) {
+    } else if (keyDate < inpArray[midIndex]?.date - candleLockerWidthDate / 2) {
       highIndex = midIndex - 1;
       midIndex = Math.floor((highIndex + lowIndex) / 2);
     }

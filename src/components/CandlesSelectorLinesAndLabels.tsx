@@ -3,11 +3,17 @@ import { findCandleIndex, getCursorPoint } from "../utils/helperFunctions";
 import { ConfigDataContextType } from "../types/ConfigDataContextType";
 import { useConfigData } from "../context/ConfigtDataContext";
 import { colors } from "../utils/Colors";
-import { DataContextType } from "../types/DataContextType";
-import { useData } from "../context/DataContext";
+import { DataActionType, DataContextType } from "../types/DataContextType";
+import { useData, useDataDispatch } from "../context/DataContext";
 import * as d3 from "d3";
-import { useDataViewerAndSelectorsDispatch } from "../context/DataViewerAndSelectorsContext";
-import { DataViewerAndSelectorsActionType } from "../types/DataViewerAndSelectorsContextType";
+import {
+  useDataViewerAndSelectors,
+  useDataViewerAndSelectorsDispatch,
+} from "../context/DataViewerAndSelectorsContext";
+import {
+  DataViewerAndSelectorsActionType,
+  DataViewerAndSelectorsContextType,
+} from "../types/DataViewerAndSelectorsContextType";
 const CandlesSelectorLinesAndLabels: React.FC<{
   candlesCanvasId: string;
   chartId: string;
@@ -26,9 +32,15 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   const dispatchDataViewer: Dispatch<DataViewerAndSelectorsActionType> =
     useDataViewerAndSelectorsDispatch();
 
+  const dataViewer: DataViewerAndSelectorsContextType =
+    useDataViewerAndSelectors();
+
+  const dispatchData: Dispatch<DataActionType> = useDataDispatch();
+
   const [showLines, setShowsLines] = useState<boolean>(false);
   const [positionX, setPositionX] = useState<number>(0);
   const [positionY, setPositionY] = useState<number>(0);
+  const [updateZoom, setUpdateZoom] = useState<"down" | "up" | false>(false);
 
   const [priceLabelTranslateY, setPriceLabelTranslateY] = useState<number>(0);
   const priceLabelWidth = useMemo<number>(
@@ -57,6 +69,10 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
   };
 
+  const mouseWheel = (evt: WheelEvent) => {
+    setUpdateZoom(evt.deltaY > 0 ? "up" : "down");
+  };
+
   useEffect(() => {
     let canvas: HTMLCanvasElement = document.querySelector(
       `#${candlesCanvasId}`,
@@ -66,10 +82,12 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
     mainSvgChart.addEventListener("mouseleave", mouseLeave);
     canvas.addEventListener("mousemove", mouseMove);
+    mainSvgChart.addEventListener("wheel", mouseWheel);
 
     return () => {
       canvas.removeEventListener("mouseleave", mouseLeave);
       mainSvgChart.removeEventListener("mouseleave", mouseLeave);
+      mainSvgChart.removeEventListener("wheel", mouseWheel);
     };
   }, []);
 
@@ -123,6 +141,38 @@ const CandlesSelectorLinesAndLabels: React.FC<{
       setDateLabelValue(dateLabelValue);
     }
   }, [positionX, config.decimal, config.canvasWidth, config.canvasHeight]);
+
+  useEffect(() => {
+    if (!updateZoom || !xScaleFunction || !config.canvasWidth) return;
+
+    if (updateZoom) {
+      setShowsLines(false);
+      let target =
+        dataViewer.candleIndex === -1
+          ? xScaleFunction.invert(positionX).getTime()
+          : data.shownData[dataViewer.candleIndex].date;
+      dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
+      let newZoomFactor = (data.zoomFactor *=
+        updateZoom === "up"
+          ? data.incrementZoomFactor
+          : data.decrementZoomFactor);
+      let newWidthInDate = Math.round(
+        (data.minMaxInitDate.max - data.minMaxInitDate.min) / newZoomFactor,
+      );
+      let coefficient = Math.round(
+        (newWidthInDate * positionX) / config.canvasWidth,
+      );
+      setUpdateZoom(false);
+      dispatchData({
+        type: "changeZoom",
+        zoomFactor: newZoomFactor,
+        shownRange: {
+          start: target - coefficient,
+          end: target - coefficient + newWidthInDate,
+        },
+      });
+    }
+  }, [updateZoom, xScaleFunction, config.canvasWidth]);
 
   return (
     <>

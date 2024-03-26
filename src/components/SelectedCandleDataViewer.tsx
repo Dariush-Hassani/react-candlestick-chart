@@ -22,8 +22,8 @@ const SelectedCandleDataViewer: React.FC<{
 
   const isUp: boolean =
     showCandleInfo &&
-    data.shownData[selectedCandleIndex.candleIndex].open >
-      data.shownData[selectedCandleIndex.candleIndex].close;
+    data.shownData[selectedCandleIndex.candleIndex]?.open >
+      data.shownData[selectedCandleIndex.candleIndex]?.close;
 
   return (
     <>

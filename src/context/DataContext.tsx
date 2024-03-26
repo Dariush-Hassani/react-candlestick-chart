@@ -31,7 +31,7 @@ const initData: DataContextType = {
   },
   zoomFactor: 1,
   incrementZoomFactor: 1.2,
-  decrementZoomFactor: 1.2,
+  decrementZoomFactor: 0.9,
   candleWidthDate: 0,
   candleLockerWidthDate: 0,
 };
@@ -109,10 +109,7 @@ function dataReducer(state: DataContextType, action: DataActionType) {
     case "changeShownRange": {
       let oldCandleWidthDate = state.candleWidthDate;
 
-      let newShownRange = {
-        start: action.shownRange.start,
-        end: action.shownRange.end,
-      };
+      let newShownRange = action.shownRange;
 
       let newZoomFactor: number =
         (state.minMaxInitDate.max - state.minMaxInitDate.min) /
@@ -120,8 +117,8 @@ function dataReducer(state: DataContextType, action: DataActionType) {
 
       let newShownData = state.initData.filter(
         (x) =>
-          x.date < action.shownRange.end - oldCandleWidthDate &&
-          x.date > action.shownRange.start + oldCandleWidthDate,
+          x.date < newShownRange.end + oldCandleWidthDate &&
+          x.date > newShownRange.start - oldCandleWidthDate,
       );
       let shownDates = newShownData.map((x) => x.date);
 
@@ -161,6 +158,74 @@ function dataReducer(state: DataContextType, action: DataActionType) {
       newState.zoomFactor = newZoomFactor;
       newState.candleWidthDate = newCandleWidthDate;
       newState.candleLockerWidthDate = newCandleLockerWidthDate;
+      return newState;
+    }
+    case "changeZoom": {
+      let newState = { ...state };
+      newState.zoomFactor = action.zoomFactor;
+
+      let oldCandleWidthDate = state.candleWidthDate;
+      oldCandleWidthDate = Number.isNaN(oldCandleWidthDate)
+        ? 0
+        : oldCandleWidthDate;
+
+      let newShownRange = action.shownRange;
+
+      if (newShownRange.start < state.initData[0].date - oldCandleWidthDate / 2)
+        newShownRange.start = state.initData[0].date - oldCandleWidthDate / 2;
+      if (
+        newShownRange.end >
+        state.initData[state.initData.length - 1].date + oldCandleWidthDate / 2
+      )
+        newShownRange.end =
+          state.initData[state.initData.length - 1].date +
+          oldCandleWidthDate / 2;
+
+      newState.shownRange = newShownRange;
+
+      let newShownData = state.initData.filter(
+        (x) =>
+          x.date < newShownRange.end + oldCandleWidthDate &&
+          x.date > newShownRange.start - oldCandleWidthDate,
+      );
+
+      let shownDates = newShownData.map((x) => x.date);
+
+      let slPrices: number[] = newShownData
+        .filter((x) => x.position && typeof x.position?.sl !== undefined)
+        .map((x) => x.position?.sl as number);
+
+      let tpPrices: number[] = newShownData
+        .filter((x) => x.position && typeof x.position?.tp !== undefined)
+        .map((x) => x.position?.tp as number);
+
+      let highPrices: number[] = newShownData.map((x) => x.high as number);
+      let lowPrices: number[] = newShownData.map((x) => x.low as number);
+
+      let allPrices: number[] = [
+        ...highPrices,
+        ...lowPrices,
+        ...slPrices,
+        ...tpPrices,
+      ];
+      let newMinMaxShownPrice = d3.extent(allPrices);
+
+      let [newCandleWidthDate, newCandleLockerWidthDate] =
+        calculateCandleWidthDate(shownDates);
+
+      newState.shownData = newShownData;
+      newState.minMaxShownDate = {
+        min: shownDates[0] ?? 0,
+        max: shownDates[newShownData.length - 1] ?? 0,
+      };
+      newState.minMaxShownPrice = {
+        min: (newMinMaxShownPrice[0] as number) ?? 0,
+        max: (newMinMaxShownPrice[1] as number) ?? 0,
+      };
+      newState.shownRange = newShownRange;
+      newState.candleWidthDate = newCandleWidthDate;
+      newState.candleLockerWidthDate = newCandleLockerWidthDate;
+
       return newState;
     }
     default: {
