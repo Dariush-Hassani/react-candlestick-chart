@@ -19,7 +19,17 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   chartId: string;
   xScaleFunction: any;
   yScaleFunction: any;
-}> = ({ candlesCanvasId, chartId, xScaleFunction, yScaleFunction }) => {
+  scrollZoom: {
+    allow: boolean;
+    max: number;
+  };
+}> = ({
+  candlesCanvasId,
+  chartId,
+  xScaleFunction,
+  yScaleFunction,
+  scrollZoom,
+}) => {
   const priceViewerLineId = "priceViewerLine";
   const dateViewerLineId = "dateViewerLine";
   const charWidth = 7.8;
@@ -145,7 +155,12 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   useEffect(() => {
     if (!updateZoom || !xScaleFunction || !config.canvasWidth) return;
 
-    if (updateZoom) {
+    if (updateZoom && scrollZoom.allow) {
+      if (
+        updateZoom === "up" &&
+        data.zoomFactor * data.incrementZoomFactor > scrollZoom.max
+      )
+        return;
       setShowsLines(false);
       let target =
         dataViewer.candleIndex === -1

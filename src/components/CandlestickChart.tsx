@@ -14,6 +14,10 @@ const CandlestickChart: React.FC<{
   decimal?: number;
   dataViewerTexts?: DataViewerTextsType;
   dataViewerColors?: DataViewerColorsType;
+  scrollZoom?: {
+    allow: boolean;
+    max: number;
+  };
 }> = ({
   data,
   id,
@@ -22,6 +26,7 @@ const CandlestickChart: React.FC<{
   decimal,
   dataViewerTexts,
   dataViewerColors,
+  scrollZoom,
 }) => {
   return (
     <DataProvider>
@@ -33,6 +38,10 @@ const CandlestickChart: React.FC<{
             width={width}
             height={height}
             decimal={decimal ?? 0}
+            scrollZoom={{
+              allow: scrollZoom ? scrollZoom.allow : true,
+              max: scrollZoom ? scrollZoom.max : 20,
+            }}
             dataViewerTexts={{
               shortPosition: dataViewerTexts?.shortPosition ?? "Short",
               longPosition: dataViewerTexts?.longPosition ?? "Long",

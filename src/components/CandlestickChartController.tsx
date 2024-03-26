@@ -26,6 +26,10 @@ const CandlestickChartController: React.FC<{
   decimal: number;
   dataViewerTexts: DataViewerTextsType;
   dataViewerColors: DataViewerColorsType;
+  scrollZoom: {
+    allow: boolean;
+    max: number;
+  };
 }> = ({
   chartData,
   id,
@@ -34,6 +38,7 @@ const CandlestickChartController: React.FC<{
   decimal,
   dataViewerTexts,
   dataViewerColors,
+  scrollZoom,
 }) => {
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
@@ -101,6 +106,7 @@ const CandlestickChartController: React.FC<{
         yScaleFunction={yScaleFunction}
         chartId={id}
         candlesCanvasId={candlesCanvasId}
+        scrollZoom={scrollZoom}
       />
     </Layout>
   );

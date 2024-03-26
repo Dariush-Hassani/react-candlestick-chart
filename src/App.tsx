@@ -21,6 +21,10 @@ function App() {
       width={width}
       height={height}
       decimal={3}
+      scrollZoom={{
+        allow: true,
+        max: 50,
+      }}
     />
   );
 }
