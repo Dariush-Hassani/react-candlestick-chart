@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useMemo } from "react";
+import React, { Dispatch, SVGProps, useEffect, useMemo } from "react";
 import { useData } from "../context/DataContext";
 import {
   useConfigData,
@@ -29,6 +29,7 @@ const Layout: React.FC<{
     enable: boolean;
     height: number;
   };
+  chartElement: SVGProps<SVGForeignObjectElement>;
 }> = ({
   id,
   width,
@@ -40,6 +41,7 @@ const Layout: React.FC<{
   dataViewerColors,
   decimal,
   rangeSelector,
+  chartElement,
 }) => {
   const yAxisId = `${id}-yAxis`;
   const xAxisId = `${id}-xAxis`;
@@ -125,6 +127,19 @@ const Layout: React.FC<{
       >
         <g id={`${yAxisId}`}></g>
         <g id={`${xAxisId}`}></g>
+        {chartElement as React.ReactNode}
+        {rangeSelector.enable ? (
+          <foreignObject
+            width={config.canvasWidth}
+            height={rangeSelector.height - (paddingBottom + 6)}
+            y={
+              config.canvasHeight ? config.canvasHeight + paddingBottom + 6 : 0
+            }
+          ></foreignObject>
+        ) : (
+          <></>
+        )}
+
         {children}
       </svg>
     </div>

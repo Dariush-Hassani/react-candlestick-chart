@@ -99,14 +99,16 @@ const CandlestickChartController: React.FC<{
       dataViewerTexts={dataViewerTexts}
       decimal={decimal}
       rangeSelector={rangeSelector}
+      chartElement={
+        <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
+          <CandlesCanvas
+            id={candlesCanvasId}
+            xScaleFunction={xScaleFunction}
+            yScaleFunction={yScaleFunction}
+          />
+        </foreignObject>
+      }
     >
-      <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
-        <CandlesCanvas
-          id={candlesCanvasId}
-          xScaleFunction={xScaleFunction}
-          yScaleFunction={yScaleFunction}
-        />
-      </foreignObject>
       <CandlesSelectorLinesAndLabels
         xScaleFunction={xScaleFunction}
         yScaleFunction={yScaleFunction}
