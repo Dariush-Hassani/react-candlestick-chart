@@ -69,9 +69,10 @@ const Layout: React.FC<{
           height - (paddingBottom + paddingTop + 6) - rangeSelector.height,
         canvasWidth: width - (paddingLeft + paddingRight) - 2,
         chartHeight: height - (paddingBottom + paddingTop + 6),
+        rangeSelectorRealHeight: rangeSelector.height - (paddingBottom + 6),
       });
     }
-  }, [width, height, config.decimal]);
+  }, [width, height, config.decimal, rangeSelector.height]);
 
   useEffect(() => {
     if (yScaleFunction) {
@@ -131,7 +132,8 @@ const Layout: React.FC<{
         {rangeSelector.enable ? (
           <foreignObject
             width={config.canvasWidth}
-            height={rangeSelector.height - (paddingBottom + 6)}
+            height={config.rangeSelectorRealHeight}
+            id={`${id}-range-selector`}
             y={
               config.canvasHeight ? config.canvasHeight + paddingBottom + 6 : 0
             }
@@ -139,7 +141,6 @@ const Layout: React.FC<{
         ) : (
           <></>
         )}
-
         {children}
       </svg>
     </div>

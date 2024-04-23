@@ -90,14 +90,20 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
     let mainSvgChart = document.querySelector(`#${chartId} svg`) as HTMLElement;
 
+    let rangeSelector = document.querySelector(
+      `#${chartId}-range-selector`,
+    ) as HTMLElement;
+
     mainSvgChart.addEventListener("mouseleave", mouseLeave);
     canvas.addEventListener("mousemove", mouseMove);
     mainSvgChart.addEventListener("wheel", mouseWheel);
+    rangeSelector?.addEventListener("mousemove", mouseLeave);
 
     return () => {
       canvas.removeEventListener("mouseleave", mouseLeave);
       mainSvgChart.removeEventListener("mouseleave", mouseLeave);
       mainSvgChart.removeEventListener("wheel", mouseWheel);
+      rangeSelector?.removeEventListener("mousemove", mouseLeave);
     };
   }, []);
 

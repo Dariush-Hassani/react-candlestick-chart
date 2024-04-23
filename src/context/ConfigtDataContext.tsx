@@ -9,6 +9,7 @@ const initData: ConfigDataContextType = {
   characterFontWidth: 7.8,
   canvasWidth: 0,
   canvasHeight: 0,
+  rangeSelectorRealHeight: 0,
   emptySpaceFromBottomPercent: 3 / 100,
   emptySpaceFromTopPercent: 4 / 100,
 };
@@ -26,6 +27,7 @@ function dataReducer(
     newState.canvasHeight = action.canvasHeight;
     newState.canvasWidth = action.canvasWidth;
     newState.chartHeight = action.chartHeight;
+    newState.rangeSelectorRealHeight = action.rangeSelectorRealHeight;
     return newState;
   } else if (action.type === "changeDecimal") {
     let newState = { ...state };

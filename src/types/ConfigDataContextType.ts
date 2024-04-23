@@ -2,6 +2,7 @@ export type ConfigDataContextType = {
   canvasWidth?: number;
   canvasHeight?: number;
   chartHeight?: number;
+  rangeSelectorRealHeight: number;
   decimal: number;
   characterFontWidth: number;
   emptySpaceFromTopPercent: number;
@@ -14,6 +15,7 @@ export type ConfigDataActionType =
       canvasWidth: number;
       canvasHeight: number;
       chartHeight: number;
+      rangeSelectorRealHeight: number;
     }
   | {
       type: "changeDecimal";
