@@ -25,6 +25,10 @@ const Layout: React.FC<{
   dataViewerTexts: DataViewerTextsType;
   dataViewerColors: DataViewerColorsType;
   decimal: number;
+  rangeSelector: {
+    enable: boolean;
+    height: number;
+  };
 }> = ({
   id,
   width,
@@ -35,6 +39,7 @@ const Layout: React.FC<{
   dataViewerTexts,
   dataViewerColors,
   decimal,
+  rangeSelector,
 }) => {
   const yAxisId = `${id}-yAxis`;
   const xAxisId = `${id}-xAxis`;
@@ -58,8 +63,10 @@ const Layout: React.FC<{
     if (width !== 0 && height !== 0) {
       dispatchConfig({
         type: "changeDiagramDimension",
-        canvasHeight: height - (paddingBottom + paddingTop + 6),
+        canvasHeight:
+          height - (paddingBottom + paddingTop + 6) - rangeSelector.height,
         canvasWidth: width - (paddingLeft + paddingRight) - 2,
+        chartHeight: height - (paddingBottom + paddingTop + 6),
       });
     }
   }, [width, height, config.decimal]);
@@ -113,7 +120,7 @@ const Layout: React.FC<{
       />
       <svg
         width={config.canvasWidth}
-        height={config.canvasHeight}
+        height={config.chartHeight}
         style={{ overflow: "inherit", cursor: "crosshair" }}
       >
         <g id={`${yAxisId}`}></g>

@@ -30,7 +30,7 @@ const initData: DataContextType = {
     max: 0,
   },
   zoomFactor: 1,
-  incrementZoomFactor: 1.2,
+  incrementZoomFactor: 1.1,
   decrementZoomFactor: 0.9,
   candleWidthDate: 0,
   candleLockerWidthDate: 0,

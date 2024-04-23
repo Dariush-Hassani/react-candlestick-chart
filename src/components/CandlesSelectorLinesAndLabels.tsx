@@ -20,7 +20,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   xScaleFunction: any;
   yScaleFunction: any;
   scrollZoom: {
-    allow: boolean;
+    enable: boolean;
     max: number;
   };
 }> = ({
@@ -155,7 +155,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   useEffect(() => {
     if (!updateZoom || !xScaleFunction || !config.canvasWidth) return;
 
-    if (updateZoom && scrollZoom.allow) {
+    if (updateZoom && scrollZoom.enable) {
       if (
         updateZoom === "up" &&
         data.zoomFactor * data.incrementZoomFactor > scrollZoom.max

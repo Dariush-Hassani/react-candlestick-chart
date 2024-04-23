@@ -22,8 +22,12 @@ function App() {
       height={height}
       decimal={3}
       scrollZoom={{
-        allow: true,
+        enable: true,
         max: 50,
+      }}
+      rangeSelector={{
+        enable: true,
+        height: 150,
       }}
     />
   );

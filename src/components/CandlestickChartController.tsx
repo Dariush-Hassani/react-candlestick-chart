@@ -27,8 +27,12 @@ const CandlestickChartController: React.FC<{
   dataViewerTexts: DataViewerTextsType;
   dataViewerColors: DataViewerColorsType;
   scrollZoom: {
-    allow: boolean;
+    enable: boolean;
     max: number;
+  };
+  rangeSelector: {
+    enable: boolean;
+    height: number;
   };
 }> = ({
   chartData,
@@ -39,6 +43,7 @@ const CandlestickChartController: React.FC<{
   dataViewerTexts,
   dataViewerColors,
   scrollZoom,
+  rangeSelector,
 }) => {
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
@@ -93,6 +98,7 @@ const CandlestickChartController: React.FC<{
       dataViewerColors={dataViewerColors}
       dataViewerTexts={dataViewerTexts}
       decimal={decimal}
+      rangeSelector={rangeSelector}
     >
       <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
         <CandlesCanvas

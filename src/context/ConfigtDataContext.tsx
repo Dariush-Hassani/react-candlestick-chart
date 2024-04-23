@@ -25,6 +25,7 @@ function dataReducer(
     let newState = { ...state };
     newState.canvasHeight = action.canvasHeight;
     newState.canvasWidth = action.canvasWidth;
+    newState.chartHeight = action.chartHeight;
     return newState;
   } else if (action.type === "changeDecimal") {
     let newState = { ...state };
