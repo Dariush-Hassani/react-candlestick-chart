@@ -103,7 +103,7 @@ const Layout: React.FC<{
         .tickSize(config.canvasHeight ?? 0);
       d3.select(`#${xAxisId}`).append("g").call(xAxis);
       d3.select(`#${xAxisId} .domain`).remove();
-      d3.selectAll(`#${xAxisId} g text`).attr("transform", "translate(0,10)");
+      d3.selectAll(`#${xAxisId} g text`).attr("transform", "translate(0,7)");
       d3.selectAll(`#${xAxisId} .tick line`).style("stroke", colors.grid);
       d3.selectAll(`#${xAxisId} .tick text`).style("fill", colors.tick);
     }

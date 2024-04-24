@@ -27,7 +27,7 @@ function App() {
       }}
       rangeSelector={{
         enable: true,
-        height: 150,
+        height: 180,
       }}
     />
   );
