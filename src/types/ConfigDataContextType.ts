@@ -7,6 +7,8 @@ export type ConfigDataContextType = {
   characterFontWidth: number;
   emptySpaceFromTopPercent: number;
   emptySpaceFromBottomPercent: number;
+  emptySpaceFromTopPercentRS: number;
+  emptySpaceFromBottomPercentRS: number;
 };
 
 export type ConfigDataActionType =

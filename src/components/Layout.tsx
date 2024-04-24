@@ -22,6 +22,8 @@ const Layout: React.FC<{
   children: React.ReactNode;
   xScaleFunction: any;
   yScaleFunction: any;
+  RSXScaleFunction: any;
+  RSYScaleFunction: any;
   dataViewerTexts: DataViewerTextsType;
   dataViewerColors: DataViewerColorsType;
   decimal: number;
@@ -42,9 +44,13 @@ const Layout: React.FC<{
   decimal,
   rangeSelector,
   chartElement,
+  RSYScaleFunction,
+  RSXScaleFunction,
 }) => {
   const yAxisId = `${id}-yAxis`;
   const xAxisId = `${id}-xAxis`;
+  const yAxisIdRS = `${yAxisId}-RS`;
+  const xAxisIdRS = `${xAxisId}-RS`;
 
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
   const data: DataContextType = useData();
@@ -86,7 +92,7 @@ const Layout: React.FC<{
       d3.selectAll(`#${yAxisId} .tick line`).style("stroke", colors.grid);
       d3.selectAll(`#${yAxisId} .tick text`).style("fill", colors.tick);
     }
-  }, [yScaleFunction, config.canvasWidth, config.canvasHeight]);
+  }, [yScaleFunction, config.canvasWidth]);
 
   useEffect(() => {
     if (xScaleFunction) {
@@ -102,6 +108,51 @@ const Layout: React.FC<{
       d3.selectAll(`#${xAxisId} .tick text`).style("fill", colors.tick);
     }
   }, [xScaleFunction, config.canvasWidth, config.canvasHeight]);
+
+  useEffect(() => {
+    if (rangeSelector.enable) {
+      if (RSYScaleFunction) {
+        d3.select(`#${yAxisIdRS}`).html("");
+        let yAxis = d3
+          .axisRight(RSYScaleFunction)
+          .tickSize(config.canvasWidth ?? 0)
+          .ticks(config.rangeSelectorRealHeight / 30);
+        d3.select(`#${yAxisIdRS}`).append("g").call(yAxis);
+        d3.select(`#${yAxisIdRS} .domain`).remove();
+        d3.selectAll(`#${yAxisIdRS} g text`).attr(
+          "transform",
+          "translate(5,0)",
+        );
+        d3.selectAll(`#${yAxisIdRS} .tick line`).style("stroke", colors.grid);
+        d3.selectAll(`#${yAxisIdRS} .tick text`).style("fill", colors.tick);
+      }
+    }
+  }, [
+    RSYScaleFunction,
+    config.canvasWidth,
+    rangeSelector.enable,
+    config.rangeSelectorRealHeight,
+  ]);
+
+  useEffect(() => {
+    if (rangeSelector.enable) {
+      if (RSXScaleFunction) {
+        d3.select(`#${xAxisIdRS}`).html("");
+        let xAxis = d3
+          .axisBottom(RSXScaleFunction)
+          .ticks((config.canvasWidth ?? 0) / 100)
+          .tickSize(config.rangeSelectorRealHeight ?? 0);
+        d3.select(`#${xAxisIdRS}`).append("g").call(xAxis);
+        d3.select(`#${xAxisIdRS} .domain`).remove();
+        d3.selectAll(`#${xAxisIdRS} g text`).attr(
+          "transform",
+          "translate(0,10)",
+        );
+        d3.selectAll(`#${xAxisIdRS} .tick line`).style("stroke", colors.grid);
+        d3.selectAll(`#${xAxisIdRS} .tick text`).style("fill", colors.tick);
+      }
+    }
+  }, [xScaleFunction, config.canvasWidth, config.rangeSelectorRealHeight]);
 
   return (
     <div
@@ -130,13 +181,26 @@ const Layout: React.FC<{
         <g id={`${xAxisId}`}></g>
         {chartElement as React.ReactNode}
         {rangeSelector.enable ? (
-          <foreignObject
-            width={config.canvasWidth}
-            height={config.rangeSelectorRealHeight}
-            style={{ background: "red" }}
-            id={`${id}-range-selector`}
-            y={config.canvasHeight ? config.canvasHeight + paddingBottom : 0}
-          ></foreignObject>
+          <>
+            <foreignObject
+              width={config.canvasWidth}
+              height={config.rangeSelectorRealHeight}
+              id={`${id}-range-selector`}
+              y={config.canvasHeight ? config.canvasHeight + paddingBottom : 0}
+            ></foreignObject>
+            <g
+              id={`${yAxisIdRS}`}
+              style={{
+                transform: `translate(0,${config.canvasHeight ? config.canvasHeight + paddingBottom : 0}px`,
+              }}
+            ></g>
+            <g
+              id={`${xAxisIdRS}`}
+              style={{
+                transform: `translate(0,${config.canvasHeight ? config.canvasHeight + paddingBottom : 0}px`,
+              }}
+            ></g>
+          </>
         ) : (
           <></>
         )}

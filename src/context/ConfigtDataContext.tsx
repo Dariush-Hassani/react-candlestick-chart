@@ -12,6 +12,9 @@ const initData: ConfigDataContextType = {
   rangeSelectorRealHeight: 0,
   emptySpaceFromBottomPercent: 3 / 100,
   emptySpaceFromTopPercent: 4 / 100,
+  emptySpaceFromBottomPercentRS: 2 / 100,
+  emptySpaceFromTopPercentRS: 2 / 100,
+  chartHeight: 0,
 };
 const ConfigDataContext = createContext<ConfigDataContextType>(initData);
 const ConfigDispatchContext = createContext<Dispatch<ConfigDataActionType>>(

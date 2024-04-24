@@ -54,6 +54,9 @@ const CandlestickChartController: React.FC<{
   const [yScaleFunction, setYScaleFunction] = useState<any>(null);
   const [xScaleFunction, setXScaleFunction] = useState<any>(null);
 
+  const [RSYScaleFunction, setRSYScaleFunction] = useState<any>(null);
+  const [RSXScaleFunction, setRSXScaleFunction] = useState<any>(null);
+
   useEffect(() => {
     dispatchData({
       type: "changeInitData",
@@ -88,6 +91,31 @@ const CandlestickChartController: React.FC<{
     setXScaleFunction(() => newXScaleFunction);
   }, [data.shownRange, config.canvasWidth]);
 
+  useEffect(() => {
+    let newRSYScaleFunction = d3
+      .scaleLinear()
+      .domain([
+        data.minMaxInitPrice.max +
+          config.emptySpaceFromTopPercentRS * data.minMaxInitPrice.max,
+        data.minMaxInitPrice.min -
+          config.emptySpaceFromBottomPercentRS * data.minMaxInitPrice.min,
+      ])
+      .range([0, config.rangeSelectorRealHeight ?? 0]);
+    setRSYScaleFunction(() => newRSYScaleFunction);
+  }, [
+    data.minMaxInitPrice,
+    rangeSelector.height,
+    config.rangeSelectorRealHeight,
+  ]);
+
+  useEffect(() => {
+    let newRSXScaleFunction = d3
+      .scaleTime()
+      .domain([data.minMaxInitDate.min, data.minMaxInitDate.max])
+      .range([0, config.canvasWidth ?? 0]);
+    setRSXScaleFunction(() => newRSXScaleFunction);
+  }, [data.minMaxInitDate, config.canvasWidth]);
+
   return (
     <Layout
       xScaleFunction={xScaleFunction}
@@ -99,6 +127,8 @@ const CandlestickChartController: React.FC<{
       dataViewerTexts={dataViewerTexts}
       decimal={decimal}
       rangeSelector={rangeSelector}
+      RSYScaleFunction={RSYScaleFunction}
+      RSXScaleFunction={RSXScaleFunction}
       chartElement={
         <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
           <CandlesCanvas
