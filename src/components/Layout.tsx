@@ -69,7 +69,7 @@ const Layout: React.FC<{
           height - (paddingBottom + paddingTop + 6) - rangeSelector.height,
         canvasWidth: width - (paddingLeft + paddingRight) - 2,
         chartHeight: height - (paddingBottom + paddingTop + 6),
-        rangeSelectorRealHeight: rangeSelector.height - (paddingBottom + 6),
+        rangeSelectorRealHeight: rangeSelector.height - 2 * paddingBottom,
       });
     }
   }, [width, height, config.decimal, rangeSelector.height]);
@@ -133,10 +133,9 @@ const Layout: React.FC<{
           <foreignObject
             width={config.canvasWidth}
             height={config.rangeSelectorRealHeight}
+            style={{ background: "red" }}
             id={`${id}-range-selector`}
-            y={
-              config.canvasHeight ? config.canvasHeight + paddingBottom + 6 : 0
-            }
+            y={config.canvasHeight ? config.canvasHeight + paddingBottom : 0}
           ></foreignObject>
         ) : (
           <></>
