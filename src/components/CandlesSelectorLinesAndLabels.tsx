@@ -51,6 +51,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   const [positionX, setPositionX] = useState<number>(0);
   const [positionY, setPositionY] = useState<number>(0);
   const [updateZoom, setUpdateZoom] = useState<"down" | "up" | false>(false);
+  const [onRSChart, setOnRSChart] = useState<boolean>(false);
 
   const [priceLabelTranslateY, setPriceLabelTranslateY] = useState<number>(0);
   const priceLabelWidth = useMemo<number>(
@@ -80,7 +81,16 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   };
 
   const mouseWheel = (evt: WheelEvent) => {
+    if (onRSChart) return;
     setUpdateZoom(evt.deltaY > 0 ? "up" : "down");
+  };
+
+  const mouseEnterRSChart = () => {
+    setOnRSChart(true);
+  };
+
+  const mouseEnterCanvas = () => {
+    setOnRSChart(false);
   };
 
   useEffect(() => {
@@ -96,16 +106,20 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
     mainSvgChart.addEventListener("mouseleave", mouseLeave);
     canvas.addEventListener("mousemove", mouseMove);
+    canvas.addEventListener("mouseenter", mouseEnterCanvas);
     mainSvgChart.addEventListener("wheel", mouseWheel);
     rangeSelector?.addEventListener("mousemove", mouseLeave);
+    rangeSelector?.addEventListener("mouseenter", mouseEnterRSChart);
 
     return () => {
       canvas.removeEventListener("mouseleave", mouseLeave);
+      canvas.removeEventListener("mouseenter", mouseEnterCanvas);
       mainSvgChart.removeEventListener("mouseleave", mouseLeave);
       mainSvgChart.removeEventListener("wheel", mouseWheel);
       rangeSelector?.removeEventListener("mousemove", mouseLeave);
+      rangeSelector?.removeEventListener("mouseenter", mouseEnterRSChart);
     };
-  }, []);
+  }, [onRSChart]);
 
   useEffect(() => {
     if (config.canvasWidth && config.canvasHeight) {
