@@ -52,6 +52,19 @@ const RSChart: React.FC<{
         strokeWidth={"2px"}
         d={pathData as string}
       ></path>
+      <rect
+        x={RSXScaleFunction ? RSXScaleFunction(data.minMaxShownDate.min) : 0}
+        y={0}
+        width={
+          RSXScaleFunction
+            ? RSXScaleFunction(data.minMaxShownDate.max) -
+              RSXScaleFunction(data.minMaxShownDate.min)
+            : 0
+        }
+        height={config.rangeSelectorRealHeight}
+        fill={colors.RSChartOverlay}
+        style={{ opacity: 0.3 }}
+      ></rect>
     </svg>
   );
 };

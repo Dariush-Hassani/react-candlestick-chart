@@ -12,4 +12,5 @@ export const colors = {
   sl: "#F9DB04",
   tp: "#04F5F9",
   RSChartStroke: "#04F5F9",
+  RSChartOverlay: "#000",
 };
