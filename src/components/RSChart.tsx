@@ -65,6 +65,28 @@ const RSChart: React.FC<{
         fill={colors.RSChartOverlay}
         style={{ opacity: 0.3 }}
       ></rect>
+      <rect
+        x={RSXScaleFunction ? RSXScaleFunction(data.minMaxShownDate.min) : 0}
+        y={config.rangeSelectorRealHeight / 4}
+        height={config.rangeSelectorRealHeight / 2}
+        width={4}
+        fill={colors.RSChartOverlayResize}
+        style={{ cursor: "e-resize" }}
+      ></rect>
+      <rect
+        x={
+          RSXScaleFunction
+            ? RSXScaleFunction
+              ? RSXScaleFunction(data.minMaxShownDate.max) - 4
+              : 0
+            : 0
+        }
+        y={config.rangeSelectorRealHeight / 4}
+        height={config.rangeSelectorRealHeight / 2}
+        width={4}
+        fill={colors.RSChartOverlayResize}
+        style={{ cursor: "e-resize" }}
+      ></rect>
     </svg>
   );
 };

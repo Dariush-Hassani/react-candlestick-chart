@@ -23,7 +23,7 @@ function App() {
       decimal={3}
       scrollZoom={{
         enable: true,
-        max: 50,
+        max: 20,
       }}
       rangeSelector={{
         enable: true,

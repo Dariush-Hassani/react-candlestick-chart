@@ -13,4 +13,5 @@ export const colors = {
   tp: "#04F5F9",
   RSChartStroke: "#04F5F9",
   RSChartOverlay: "#000",
+  RSChartOverlayResize: "#e13443",
 };
