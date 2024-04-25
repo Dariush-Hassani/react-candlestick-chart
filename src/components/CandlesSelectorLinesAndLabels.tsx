@@ -199,8 +199,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
       );
       setUpdateZoom(false);
       dispatchData({
-        type: "changeZoom",
-        zoomFactor: newZoomFactor,
+        type: "changeShownRange",
         shownRange: {
           start: target - coefficient,
           end: target - coefficient + newWidthInDate,
