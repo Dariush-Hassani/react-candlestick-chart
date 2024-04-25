@@ -14,6 +14,7 @@ import { DataContextType } from "../types/DataContextType";
 import SelectedCandleDataViewer from "./SelectedCandleDataViewer";
 import { DataViewerTextsType } from "../types/DataViewerTextsType";
 import { DataViewerColorsType } from "../types/DataViewerColorsType";
+import RSChart from "./RSChart";
 
 const Layout: React.FC<{
   id: string;
@@ -182,12 +183,6 @@ const Layout: React.FC<{
         {chartElement as React.ReactNode}
         {rangeSelector.enable ? (
           <>
-            <foreignObject
-              width={config.canvasWidth}
-              height={config.rangeSelectorRealHeight}
-              id={`${id}-range-selector`}
-              y={config.canvasHeight ? config.canvasHeight + paddingBottom : 0}
-            ></foreignObject>
             <g
               id={`${yAxisIdRS}`}
               style={{
@@ -200,6 +195,18 @@ const Layout: React.FC<{
                 transform: `translate(0,${config.canvasHeight ? config.canvasHeight + paddingBottom : 0}px`,
               }}
             ></g>
+            <foreignObject
+              width={config.canvasWidth}
+              height={config.rangeSelectorRealHeight}
+              id={`${id}-range-selector`}
+              y={config.canvasHeight ? config.canvasHeight + paddingBottom : 0}
+            >
+              <RSChart
+                id={id}
+                RSXScaleFunction={RSXScaleFunction}
+                RSYScaleFunction={RSYScaleFunction}
+              />
+            </foreignObject>
           </>
         ) : (
           <></>

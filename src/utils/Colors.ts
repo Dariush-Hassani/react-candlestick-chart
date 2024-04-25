@@ -11,4 +11,5 @@ export const colors = {
   shortPosition: "#fff",
   sl: "#F9DB04",
   tp: "#04F5F9",
+  RSChartStroke: "#04F5F9",
 };
