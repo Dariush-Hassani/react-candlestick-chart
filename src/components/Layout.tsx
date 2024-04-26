@@ -32,6 +32,7 @@ const Layout: React.FC<{
     enable: boolean;
     height: number;
   };
+  candlesCanvasId: string;
   chartElement: SVGProps<SVGForeignObjectElement>;
 }> = ({
   id,
@@ -47,6 +48,7 @@ const Layout: React.FC<{
   chartElement,
   RSYScaleFunction,
   RSXScaleFunction,
+  candlesCanvasId,
 }) => {
   const yAxisId = `${id}-yAxis`;
   const xAxisId = `${id}-xAxis`;
@@ -205,6 +207,7 @@ const Layout: React.FC<{
                 id={id}
                 RSXScaleFunction={RSXScaleFunction}
                 RSYScaleFunction={RSYScaleFunction}
+                candlesCanvasId={candlesCanvasId}
               />
             </foreignObject>
           </>

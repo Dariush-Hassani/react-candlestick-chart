@@ -129,6 +129,7 @@ const CandlestickChartController: React.FC<{
       rangeSelector={rangeSelector}
       RSYScaleFunction={RSYScaleFunction}
       RSXScaleFunction={RSXScaleFunction}
+      candlesCanvasId={candlesCanvasId}
       chartElement={
         <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
           <CandlesCanvas
