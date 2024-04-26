@@ -107,6 +107,7 @@ function dataReducer(state: DataContextType, action: DataActionType) {
       return newState;
     }
     case "changeShownRange": {
+      debugger;
       let newShownRange = action.shownRange;
       newShownRange.start =
         newShownRange.start < state.minMaxInitDate.min
@@ -152,6 +153,9 @@ function dataReducer(state: DataContextType, action: DataActionType) {
         calculateCandleWidthDate(shownDates);
 
       let newState = { ...state };
+
+      if (!newCandleWidthDate) return state;
+
       newState.shownData = newShownData;
       newState.minMaxShownDate = {
         min: newShownRange.start,

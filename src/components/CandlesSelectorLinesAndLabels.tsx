@@ -79,6 +79,8 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
   const [dateLinePosition, setDateLinePosition] = useState<number>(0);
 
+  const [firstRender, setFirstRender] = useState<boolean>(true);
+
   const mouseMove = (evt: MouseEvent) => {
     setShowsLines(true);
     let point = getCursorPoint(candlesCanvasId, evt);
@@ -125,22 +127,22 @@ const CandlesSelectorLinesAndLabels: React.FC<{
       `#${chartId}-range-selector`,
     ) as HTMLElement;
 
-    mainSvgChart.addEventListener("mouseleave", mouseLeave);
-    canvas.addEventListener("mousemove", mouseMove);
-    canvas.addEventListener("mouseenter", mouseEnterCanvas);
-    mainSvgChart.addEventListener("mousedown", canvasMouseDown);
-    mainSvgChart.addEventListener("mouseup", canvasMouseUp);
-    mainSvgChart.addEventListener("wheel", mouseWheel);
+    mainSvgChart?.addEventListener("mouseleave", mouseLeave);
+    canvas?.addEventListener("mousemove", mouseMove);
+    canvas?.addEventListener("mouseenter", mouseEnterCanvas);
+    mainSvgChart?.addEventListener("mousedown", canvasMouseDown);
+    mainSvgChart?.addEventListener("mouseup", canvasMouseUp);
+    mainSvgChart?.addEventListener("wheel", mouseWheel, { passive: true });
     rangeSelector?.addEventListener("mousemove", mouseLeave);
     rangeSelector?.addEventListener("mouseenter", mouseEnterRSChart);
 
     return () => {
-      canvas.removeEventListener("mouseleave", mouseLeave);
-      canvas.removeEventListener("mouseenter", mouseEnterCanvas);
-      mainSvgChart.removeEventListener("mousedown", canvasMouseDown);
-      mainSvgChart.removeEventListener("mouseup", canvasMouseUp);
-      mainSvgChart.removeEventListener("mouseleave", mouseLeave);
-      mainSvgChart.removeEventListener("wheel", mouseWheel);
+      canvas?.removeEventListener("mouseleave", mouseLeave);
+      canvas?.removeEventListener("mouseenter", mouseEnterCanvas);
+      mainSvgChart?.removeEventListener("mousedown", canvasMouseDown);
+      mainSvgChart?.removeEventListener("mouseup", canvasMouseUp);
+      mainSvgChart?.removeEventListener("mouseleave", mouseLeave);
+      mainSvgChart?.removeEventListener("wheel", mouseWheel);
       rangeSelector?.removeEventListener("mousemove", mouseLeave);
       rangeSelector?.removeEventListener("mouseenter", mouseEnterRSChart);
     };
@@ -194,7 +196,6 @@ const CandlesSelectorLinesAndLabels: React.FC<{
         xScaleFunction.invert(posX),
       );
       setDateLabelValue(dateLabelValue);
-      console.log(selectedCandleIndex);
     }
   }, [
     positionX,
@@ -205,9 +206,13 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   ]);
 
   useEffect(() => {
+    if (positionX) setFirstRender(false);
+  }, [positionX]);
+
+  useEffect(() => {
     if (!updateZoom || !xScaleFunction || !config.canvasWidth) return;
 
-    if (updateZoom && scrollZoom.enable) {
+    if (updateZoom && scrollZoom.enable && !firstRender) {
       if (
         updateZoom === "up" &&
         data.zoomFactor * data.incrementZoomFactor > scrollZoom.max
@@ -238,7 +243,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
         },
       });
     }
-  }, [updateZoom, xScaleFunction, config.canvasWidth]);
+  }, [updateZoom, xScaleFunction, config.canvasWidth, firstRender]);
 
   useEffect(() => {
     if (config.pan) {
