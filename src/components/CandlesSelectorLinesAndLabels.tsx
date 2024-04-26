@@ -199,7 +199,6 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   }, [
     positionX,
     config.canvasWidth,
-    data.shownData,
     data.candleLockerWidthDate,
     dateLabelWidth,
     config.pan,
