@@ -124,9 +124,7 @@ function dataReducer(state: DataContextType, action: DataActionType) {
         (newShownRange.end - newShownRange.start);
 
       let newShownData = state.initData.filter(
-        (x) =>
-          x.date < newShownRange.end + state.candleWidthDate &&
-          x.date > newShownRange.start - state.candleWidthDate,
+        (x) => x.date < newShownRange.end && x.date > newShownRange.start,
       );
       let shownDates = newShownData.map((x) => x.date);
 
