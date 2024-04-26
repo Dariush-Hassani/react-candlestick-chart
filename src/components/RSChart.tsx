@@ -19,10 +19,15 @@ const RSChart: React.FC<{
   const config: ConfigDataContextType = useConfigData();
   const leftPanId = `${chartId}-left-pan`;
   const rightPanId = `${chartId}-right-pan`;
+  const panId = `${chartId}-pan`;
   const [pathData, setPathData] = useState<string | null>();
   const [leftPan, setLeftPan] = useState<boolean>(false);
   const [rightPan, setRightPan] = useState<boolean>(false);
+  const [pan, setPan] = useState<boolean>(false);
+  const [panTarget, setPanTarget] = useState<number>(0);
   const [positionX, setPositionX] = useState<number>(0);
+  const [leftDistanceToTarget, setLeftDistanceToTarget] = useState<number>(0);
+  const [panAreaWidth, setPanAreaWidth] = useState<number>(0);
 
   const mouseMove = (evt: MouseEvent) => {
     let point = getCursorPoint(candlesCanvasId, evt);
@@ -31,16 +36,20 @@ const RSChart: React.FC<{
 
   const leftPanMouseDown = () => setLeftPan(true);
   const rightPanMouseDown = () => setRightPan(true);
+  const panMouseDown = () => setPan(true);
   const panMouseUp = () => {
     setLeftPan(false);
     setRightPan(false);
+    setPan(false);
   };
 
   useEffect(() => {
     let RSChart = document.querySelector(`#${chartId}`) as HTMLElement;
     let leftPanBtn = document.querySelector(`#${leftPanId}`) as HTMLElement;
     let rightPanBtn = document.querySelector(`#${rightPanId}`) as HTMLElement;
+    let panArea = document.querySelector(`#${panId}`) as HTMLElement;
 
+    panArea.addEventListener("mousedown", panMouseDown);
     leftPanBtn.addEventListener("mousedown", leftPanMouseDown);
     leftPanBtn.addEventListener("mouseup", panMouseUp);
     rightPanBtn.addEventListener("mousedown", rightPanMouseDown);
@@ -50,6 +59,7 @@ const RSChart: React.FC<{
     RSChart.addEventListener("mousemove", mouseMove);
 
     return () => {
+      panArea.removeEventListener("mousedown", panMouseDown);
       leftPanBtn.removeEventListener("mousedown", leftPanMouseDown);
       leftPanBtn.removeEventListener("mouseup", panMouseUp);
       rightPanBtn.removeEventListener("mousedown", rightPanMouseDown);
@@ -59,6 +69,19 @@ const RSChart: React.FC<{
       RSChart.removeEventListener("mousemove", mouseMove);
     };
   }, []);
+
+  useEffect(() => {
+    if (pan) {
+      setPanTarget(positionX);
+      setLeftDistanceToTarget(
+        positionX - RSXScaleFunction(data.minMaxShownDate.min),
+      );
+      setPanAreaWidth(data.minMaxShownDate.max - data.minMaxShownDate.min);
+    } else {
+      setPanTarget(0);
+      setLeftDistanceToTarget(0);
+    }
+  }, [pan]);
 
   useEffect(() => {
     if (leftPan) {
@@ -84,6 +107,16 @@ const RSChart: React.FC<{
       dispatchData({
         type: "changeShownRange",
         shownRange: { start: data.shownRange.start, end: newRightShownDate },
+      });
+    } else if (panTarget !== 0) {
+      let leftTarget = positionX - leftDistanceToTarget;
+      let leftTargetDate = RSXScaleFunction.invert(leftTarget).getTime();
+      dispatchData({
+        type: "changeShownRange",
+        shownRange: {
+          start: leftTargetDate,
+          end: leftTargetDate + panAreaWidth,
+        },
       });
     }
   }, [positionX]);
@@ -126,6 +159,7 @@ const RSChart: React.FC<{
         d={pathData as string}
       ></path>
       <rect
+        id={panId}
         x={RSXScaleFunction ? RSXScaleFunction(data.minMaxShownDate.min) : 0}
         y={0}
         width={
@@ -136,7 +170,7 @@ const RSChart: React.FC<{
         }
         height={config.rangeSelectorRealHeight}
         fill={colors.RSChartOverlay}
-        style={{ opacity: 0.3 }}
+        style={{ opacity: 0.3, cursor: "all-scroll" }}
       ></rect>
       <rect
         x={RSXScaleFunction ? RSXScaleFunction(data.minMaxShownDate.min) : 0}
