@@ -172,6 +172,7 @@ const CandlesCanvas: React.FC<{
       height={config.canvasHeight}
       ref={canvas}
       id={id}
+      style={{ cursor: config.pan ? "all-scroll" : "" }}
     ></canvas>
   );
 };
