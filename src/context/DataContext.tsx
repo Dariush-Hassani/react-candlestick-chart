@@ -123,7 +123,9 @@ function dataReducer(state: DataContextType, action: DataActionType) {
         (newShownRange.end - newShownRange.start);
 
       let newShownData = state.initData.filter(
-        (x) => x.date < newShownRange.end && x.date > newShownRange.start,
+        (x) =>
+          x.date < newShownRange.end + state.candleWidthDate / 2 &&
+          x.date > newShownRange.start - state.candleWidthDate / 2,
       );
 
       let shownDates = newShownData.map((x) => x.date);
@@ -147,12 +149,17 @@ function dataReducer(state: DataContextType, action: DataActionType) {
       ];
       let newMinMaxShownPrice = d3.extent(allPrices);
 
+      newMinMaxShownPrice[0] = newMinMaxShownPrice[0]
+        ? newMinMaxShownPrice[0]
+        : 0;
+      newMinMaxShownPrice[1] = newMinMaxShownPrice[0]
+        ? newMinMaxShownPrice[1]
+        : 0;
+
       let [newCandleWidthDate, newCandleLockerWidthDate] =
         calculateCandleWidthDate(shownDates);
 
       let newState = { ...state };
-
-      if (!newCandleWidthDate) return state;
 
       newState.shownData = newShownData;
       newState.minMaxShownDate = {
@@ -165,8 +172,12 @@ function dataReducer(state: DataContextType, action: DataActionType) {
       };
       newState.shownRange = newShownRange;
       newState.zoomFactor = newZoomFactor;
-      newState.candleWidthDate = newCandleWidthDate;
-      newState.candleLockerWidthDate = newCandleLockerWidthDate;
+      newState.candleWidthDate = isNaN(newCandleWidthDate)
+        ? state.candleWidthDate
+        : newCandleWidthDate;
+      newState.candleLockerWidthDate = isNaN(newCandleLockerWidthDate)
+        ? state.candleLockerWidthDate
+        : newCandleLockerWidthDate;
 
       return newState;
     }
