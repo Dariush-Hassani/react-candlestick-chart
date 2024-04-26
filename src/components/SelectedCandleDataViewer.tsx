@@ -5,6 +5,8 @@ import { DataContextType } from "../types/DataContextType";
 import { useData } from "../context/DataContext";
 import { DataViewerAndSelectorsContextType } from "../types/DataViewerAndSelectorsContextType";
 import { useDataViewerAndSelectors } from "../context/DataViewerAndSelectorsContext";
+import { ConfigDataContextType } from "../types/ConfigDataContextType";
+import { useConfigData } from "../context/ConfigtDataContext";
 
 const SelectedCandleDataViewer: React.FC<{
   dataViewerTexts: DataViewerTextsType;
@@ -15,6 +17,7 @@ const SelectedCandleDataViewer: React.FC<{
   const selectedCandleIndex: DataViewerAndSelectorsContextType =
     useDataViewerAndSelectors();
   const showCandleInfo = selectedCandleIndex.candleIndex !== -1;
+  const config: ConfigDataContextType = useConfigData();
 
   const selectedData = showCandleInfo
     ? data.shownData[selectedCandleIndex.candleIndex]
@@ -27,7 +30,7 @@ const SelectedCandleDataViewer: React.FC<{
 
   return (
     <>
-      {showCandleInfo ? (
+      {showCandleInfo && !config.pan ? (
         <>
           <div
             style={{

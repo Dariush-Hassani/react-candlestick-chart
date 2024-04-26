@@ -9,6 +9,7 @@ export type ConfigDataContextType = {
   emptySpaceFromBottomPercent: number;
   emptySpaceFromTopPercentRS: number;
   emptySpaceFromBottomPercentRS: number;
+  pan: boolean;
 };
 
 export type ConfigDataActionType =
@@ -22,4 +23,5 @@ export type ConfigDataActionType =
   | {
       type: "changeDecimal";
       decimal: number;
-    };
+    }
+  | { type: "changePan"; pan: boolean };

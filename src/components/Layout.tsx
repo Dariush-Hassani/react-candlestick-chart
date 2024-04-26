@@ -176,7 +176,7 @@ const Layout: React.FC<{
       <svg
         width={config.canvasWidth}
         height={config.chartHeight}
-        style={{ overflow: "inherit", cursor: "crosshair" }}
+        style={{ overflow: "inherit", cursor: "crosshair", userSelect: "none" }}
       >
         <g id={`${yAxisId}`}></g>
         <g id={`${xAxisId}`}></g>

@@ -1,7 +1,13 @@
 import React, { Dispatch, useEffect, useMemo, useState } from "react";
 import { findCandleIndex, getCursorPoint } from "../utils/helperFunctions";
-import { ConfigDataContextType } from "../types/ConfigDataContextType";
-import { useConfigData } from "../context/ConfigtDataContext";
+import {
+  ConfigDataActionType,
+  ConfigDataContextType,
+} from "../types/ConfigDataContextType";
+import {
+  useConfigData,
+  useConfigDispatch,
+} from "../context/ConfigtDataContext";
 import { colors } from "../utils/Colors";
 import { DataActionType, DataContextType } from "../types/DataContextType";
 import { useData, useDataDispatch } from "../context/DataContext";
@@ -46,12 +52,17 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     useDataViewerAndSelectors();
 
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
+  const dispatchConfigData: Dispatch<ConfigDataActionType> =
+    useConfigDispatch();
 
   const [showLines, setShowsLines] = useState<boolean>(false);
   const [positionX, setPositionX] = useState<number>(0);
   const [positionY, setPositionY] = useState<number>(0);
   const [updateZoom, setUpdateZoom] = useState<"down" | "up" | false>(false);
   const [onRSChart, setOnRSChart] = useState<boolean>(false);
+
+  const [panTarget, setPanTarget] = useState<number>(0);
+  const [panDateWidth, setPanDateWidth] = useState<number>(0);
 
   const [priceLabelTranslateY, setPriceLabelTranslateY] = useState<number>(0);
   const priceLabelWidth = useMemo<number>(
@@ -77,6 +88,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
   const mouseLeave = () => {
     setShowsLines(false);
+    dispatchConfigData({ type: "changePan", pan: false });
     dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
   };
 
@@ -93,6 +105,15 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     setOnRSChart(false);
   };
 
+  const canvasMouseDown = () => {
+    dispatchConfigData({ type: "changePan", pan: true });
+  };
+
+  const canvasMouseUp = () => {
+    dispatchConfigData({ type: "changePan", pan: false });
+    dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
+  };
+
   useEffect(() => {
     let canvas: HTMLCanvasElement = document.querySelector(
       `#${candlesCanvasId}`,
@@ -107,6 +128,8 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     mainSvgChart.addEventListener("mouseleave", mouseLeave);
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseenter", mouseEnterCanvas);
+    mainSvgChart.addEventListener("mousedown", canvasMouseDown);
+    mainSvgChart.addEventListener("mouseup", canvasMouseUp);
     mainSvgChart.addEventListener("wheel", mouseWheel);
     rangeSelector?.addEventListener("mousemove", mouseLeave);
     rangeSelector?.addEventListener("mouseenter", mouseEnterRSChart);
@@ -114,6 +137,8 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     return () => {
       canvas.removeEventListener("mouseleave", mouseLeave);
       canvas.removeEventListener("mouseenter", mouseEnterCanvas);
+      mainSvgChart.removeEventListener("mousedown", canvasMouseDown);
+      mainSvgChart.removeEventListener("mouseup", canvasMouseUp);
       mainSvgChart.removeEventListener("mouseleave", mouseLeave);
       mainSvgChart.removeEventListener("wheel", mouseWheel);
       rangeSelector?.removeEventListener("mousemove", mouseLeave);
@@ -138,7 +163,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   }, [positionY, config.decimal, config.canvasWidth, config.canvasHeight]);
 
   useEffect(() => {
-    if (config.canvasWidth && config.canvasHeight) {
+    if (config.canvasWidth) {
       let selectedCandleIndex = findCandleIndex(
         data.shownData,
         data.candleLockerWidthDate,
@@ -169,8 +194,16 @@ const CandlesSelectorLinesAndLabels: React.FC<{
         xScaleFunction.invert(posX),
       );
       setDateLabelValue(dateLabelValue);
+      console.log(selectedCandleIndex);
     }
-  }, [positionX, config.decimal, config.canvasWidth, config.canvasHeight]);
+  }, [
+    positionX,
+    config.canvasWidth,
+    data.shownData,
+    data.candleLockerWidthDate,
+    dateLabelWidth,
+    config.pan,
+  ]);
 
   useEffect(() => {
     if (!updateZoom || !xScaleFunction || !config.canvasWidth) return;
@@ -208,9 +241,39 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     }
   }, [updateZoom, xScaleFunction, config.canvasWidth]);
 
+  useEffect(() => {
+    if (config.pan) {
+      setPanTarget(xScaleFunction?.invert(positionX));
+      setPanDateWidth(data.minMaxShownDate.max - data.minMaxShownDate.min);
+    } else {
+      if (data.shownRange.start && data.shownRange.end) {
+        dispatchData({
+          type: "changeShownRange",
+          shownRange: {
+            start: data.shownRange.start,
+            end: data.shownRange.end,
+          },
+        });
+      }
+    }
+  }, [config.pan]);
+
+  useEffect(() => {
+    if (config.pan) {
+      let fraction = positionX / (config.canvasWidth as number);
+      let startShownDate = panTarget - fraction * panDateWidth;
+      let endShownDate = startShownDate + panDateWidth;
+
+      dispatchData({
+        type: "changeShownRange",
+        shownRange: { start: startShownDate, end: endShownDate },
+      });
+    }
+  }, [positionX]);
+
   return (
     <>
-      {showLines ? (
+      {showLines && !config.pan ? (
         <>
           <line
             strokeDasharray={"2,2"}

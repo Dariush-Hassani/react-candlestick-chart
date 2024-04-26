@@ -15,6 +15,7 @@ const initData: ConfigDataContextType = {
   emptySpaceFromBottomPercentRS: 2 / 100,
   emptySpaceFromTopPercentRS: 2 / 100,
   chartHeight: 0,
+  pan: false,
 };
 const ConfigDataContext = createContext<ConfigDataContextType>(initData);
 const ConfigDispatchContext = createContext<Dispatch<ConfigDataActionType>>(
@@ -35,6 +36,10 @@ function dataReducer(
   } else if (action.type === "changeDecimal") {
     let newState = { ...state };
     newState.decimal = action.decimal;
+    return newState;
+  } else if (action.type === "changePan") {
+    let newState = { ...state };
+    newState.pan = action.pan;
     return newState;
   } else {
     return state;
