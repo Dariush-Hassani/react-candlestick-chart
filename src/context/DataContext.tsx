@@ -107,7 +107,6 @@ function dataReducer(state: DataContextType, action: DataActionType) {
       return newState;
     }
     case "changeShownRange": {
-      debugger;
       let newShownRange = action.shownRange;
       newShownRange.start =
         newShownRange.start < state.minMaxInitDate.min
@@ -126,6 +125,7 @@ function dataReducer(state: DataContextType, action: DataActionType) {
       let newShownData = state.initData.filter(
         (x) => x.date < newShownRange.end && x.date > newShownRange.start,
       );
+
       let shownDates = newShownData.map((x) => x.date);
 
       let slPrices: number[] = newShownData
