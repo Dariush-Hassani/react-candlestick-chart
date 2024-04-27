@@ -127,22 +127,26 @@ const CandlesSelectorLinesAndLabels: React.FC<{
       `#${chartId}-range-selector`,
     ) as HTMLElement;
 
-    mainSvgChart?.addEventListener("mouseleave", mouseLeave);
     canvas?.addEventListener("mousemove", mouseMove);
     canvas?.addEventListener("mouseenter", mouseEnterCanvas);
+
     mainSvgChart?.addEventListener("mousedown", canvasMouseDown);
     mainSvgChart?.addEventListener("mouseup", canvasMouseUp);
+    mainSvgChart?.addEventListener("mouseleave", mouseLeave);
     mainSvgChart?.addEventListener("wheel", mouseWheel, { passive: true });
+
     rangeSelector?.addEventListener("mousemove", mouseLeave);
     rangeSelector?.addEventListener("mouseenter", mouseEnterRSChart);
 
     return () => {
-      canvas?.removeEventListener("mouseleave", mouseLeave);
+      canvas?.removeEventListener("mousemove", mouseMove);
       canvas?.removeEventListener("mouseenter", mouseEnterCanvas);
+
       mainSvgChart?.removeEventListener("mousedown", canvasMouseDown);
       mainSvgChart?.removeEventListener("mouseup", canvasMouseUp);
       mainSvgChart?.removeEventListener("mouseleave", mouseLeave);
       mainSvgChart?.removeEventListener("wheel", mouseWheel);
+
       rangeSelector?.removeEventListener("mousemove", mouseLeave);
       rangeSelector?.removeEventListener("mouseenter", mouseEnterRSChart);
     };

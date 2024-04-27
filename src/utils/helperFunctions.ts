@@ -99,6 +99,25 @@ export const getCursorPoint = (
   };
 };
 
+export const getTouchPoint = (
+  id: string,
+  evt: TouchEvent,
+): { x: number; y: number } => {
+  let canvas: HTMLCanvasElement = document.querySelector(
+    `#${id}`,
+  ) as HTMLCanvasElement;
+  let rect: DOMRect = canvas.getBoundingClientRect(),
+    root = document.documentElement;
+
+  // return relative mouse position
+  let mouseX: number = evt.touches[0].clientX - rect.left - root.scrollLeft;
+  let mouseY: number = evt.touches[0].clientY - rect.top - root.scrollTop;
+  return {
+    x: mouseX,
+    y: mouseY,
+  };
+};
+
 // export const findCandleIndex = (inpArray: number[], key: number): number => {
 //   let lowIndex = 0;
 //   let highIndex = inpArray.length - 1;
