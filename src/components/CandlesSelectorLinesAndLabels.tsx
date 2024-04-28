@@ -108,6 +108,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   };
 
   const touchStart = (evt: TouchEvent) => {
+    if (onRSChart) return;
     dispatchDataViewer({ type: "changeShowLines", showLines: true });
     let point = getTouchPoint(candlesCanvasId, evt);
     setPositionX(point.x);
@@ -153,12 +154,9 @@ const CandlesSelectorLinesAndLabels: React.FC<{
       `#${chartId}-range-selector`,
     ) as HTMLElement;
 
-    canvas?.addEventListener("touchmove", touchMove);
-    mainSvgChart?.addEventListener("touchstart", touchStart);
-    mainSvgChart?.addEventListener("touchend", touchEnd);
-
     canvas?.addEventListener("mousemove", mouseMove);
     canvas?.addEventListener("mouseenter", mouseEnterCanvas);
+    canvas?.addEventListener("touchstart", mouseEnterCanvas);
 
     mainSvgChart?.addEventListener("mousedown", canvasMouseDown);
     mainSvgChart?.addEventListener("mouseup", canvasMouseUp);
@@ -166,7 +164,13 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     mainSvgChart?.addEventListener("wheel", mouseWheel, { passive: true });
 
     rangeSelector?.addEventListener("mousemove", mouseLeave);
+    rangeSelector?.addEventListener("touchmove", mouseLeave);
+    rangeSelector?.addEventListener("touchstart", mouseEnterRSChart);
     rangeSelector?.addEventListener("mouseenter", mouseEnterRSChart);
+
+    canvas?.addEventListener("touchmove", touchMove);
+    mainSvgChart?.addEventListener("touchstart", touchStart);
+    mainSvgChart?.addEventListener("touchend", touchEnd);
 
     return () => {
       canvas?.removeEventListener("touchmove", touchMove);
@@ -175,6 +179,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
       canvas?.removeEventListener("mousemove", mouseMove);
       canvas?.removeEventListener("mouseenter", mouseEnterCanvas);
+      canvas?.removeEventListener("touchstart", mouseEnterCanvas);
 
       mainSvgChart?.removeEventListener("mousedown", canvasMouseDown);
       mainSvgChart?.removeEventListener("mouseup", canvasMouseUp);
@@ -183,6 +188,8 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
       rangeSelector?.removeEventListener("mousemove", mouseLeave);
       rangeSelector?.removeEventListener("mouseenter", mouseEnterRSChart);
+      rangeSelector?.removeEventListener("touchmove", mouseLeave);
+      rangeSelector?.removeEventListener("touchstart", mouseEnterRSChart);
     };
   }, [onRSChart, config.pan]);
 

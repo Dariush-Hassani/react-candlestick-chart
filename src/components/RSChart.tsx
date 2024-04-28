@@ -5,7 +5,7 @@ import { DataActionType, DataContextType } from "../types/DataContextType";
 import { useData, useDataDispatch } from "../context/DataContext";
 import * as d3 from "d3";
 import { colors } from "../utils/Colors";
-import { getCursorPoint } from "../utils/helperFunctions";
+import { getCursorPoint, getTouchPoint } from "../utils/helperFunctions";
 
 const RSChart: React.FC<{
   id: string;
@@ -28,9 +28,15 @@ const RSChart: React.FC<{
   const [positionX, setPositionX] = useState<number>(0);
   const [leftDistanceToTarget, setLeftDistanceToTarget] = useState<number>(0);
   const [panAreaWidth, setPanAreaWidth] = useState<number>(0);
+  const [sizer, setSizer] = useState<number>(20);
 
   const mouseMove = (evt: MouseEvent) => {
     let point = getCursorPoint(candlesCanvasId, evt);
+    setPositionX(point.x);
+  };
+
+  const touchMove = (evt: TouchEvent) => {
+    let point = getTouchPoint(candlesCanvasId, evt);
     setPositionX(point.x);
   };
 
@@ -51,22 +57,32 @@ const RSChart: React.FC<{
 
     panArea.addEventListener("mousedown", panMouseDown);
     leftPanBtn.addEventListener("mousedown", leftPanMouseDown);
+    leftPanBtn.addEventListener("touchstart", leftPanMouseDown);
     leftPanBtn.addEventListener("mouseup", panMouseUp);
+    leftPanBtn.addEventListener("touchend", panMouseUp);
     rightPanBtn.addEventListener("mousedown", rightPanMouseDown);
+    rightPanBtn.addEventListener("touchstart", rightPanMouseDown);
     rightPanBtn.addEventListener("mouseup", panMouseUp);
+    rightPanBtn.addEventListener("touchend", panMouseUp);
     RSChart.addEventListener("mouseup", panMouseUp);
     RSChart.addEventListener("mouseleave", panMouseUp);
     RSChart.addEventListener("mousemove", mouseMove);
+    RSChart.addEventListener("touchmove", touchMove);
 
     return () => {
       panArea.removeEventListener("mousedown", panMouseDown);
       leftPanBtn.removeEventListener("mousedown", leftPanMouseDown);
+      leftPanBtn.removeEventListener("touchstart", leftPanMouseDown);
       leftPanBtn.removeEventListener("mouseup", panMouseUp);
+      leftPanBtn.removeEventListener("touchend", panMouseUp);
       rightPanBtn.removeEventListener("mousedown", rightPanMouseDown);
+      rightPanBtn.removeEventListener("touchstart", rightPanMouseDown);
       rightPanBtn.removeEventListener("mouseup", panMouseUp);
+      rightPanBtn.removeEventListener("touchend", panMouseUp);
       RSChart.removeEventListener("mouseup", panMouseUp);
       RSChart.removeEventListener("mouseleave", panMouseUp);
       RSChart.removeEventListener("mousemove", mouseMove);
+      RSChart.removeEventListener("touchmove", touchMove);
     };
   }, []);
 
@@ -176,7 +192,7 @@ const RSChart: React.FC<{
         x={RSXScaleFunction ? RSXScaleFunction(data.minMaxShownDate.min) : 0}
         y={config.rangeSelectorRealHeight / 4}
         height={config.rangeSelectorRealHeight / 2}
-        width={4}
+        width={sizer}
         fill={colors.RSChartOverlayResize}
         style={{ cursor: "e-resize" }}
         id={leftPanId}
@@ -185,13 +201,13 @@ const RSChart: React.FC<{
         x={
           RSXScaleFunction
             ? RSXScaleFunction
-              ? RSXScaleFunction(data.minMaxShownDate.max) - 4
+              ? RSXScaleFunction(data.minMaxShownDate.max) - sizer
               : 0
             : 0
         }
         y={config.rangeSelectorRealHeight / 4}
         height={config.rangeSelectorRealHeight / 2}
-        width={4}
+        width={sizer}
         fill={colors.RSChartOverlayResize}
         style={{ cursor: "e-resize" }}
         id={rightPanId}
