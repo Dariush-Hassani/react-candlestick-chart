@@ -1,5 +1,9 @@
 import React, { Dispatch, useEffect, useMemo, useState } from "react";
-import { findCandleIndex, getCursorPoint } from "../utils/helperFunctions";
+import {
+  findCandleIndex,
+  getCursorPoint,
+  getTouchPoint,
+} from "../utils/helperFunctions";
 import {
   ConfigDataActionType,
   ConfigDataContextType,
@@ -88,6 +92,23 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     setPositionY(point.y);
   };
 
+  const touchMove = (evt: TouchEvent) => {
+    setShowsLines(false);
+    dispatchConfigData({ type: "changePan", pan: true });
+    if (config.pan) {
+      let point = getTouchPoint(candlesCanvasId, evt);
+      setPositionX(point.x);
+      setPositionY(point.y);
+    }
+  };
+
+  const touchStart = (evt: TouchEvent) => {
+    setShowsLines(true);
+    let point = getTouchPoint(candlesCanvasId, evt);
+    setPositionX(point.x);
+    setPositionY(point.y);
+  };
+
   const mouseLeave = () => {
     setShowsLines(false);
     dispatchConfigData({ type: "changePan", pan: false });
@@ -116,6 +137,10 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
   };
 
+  const touchEnd = () => {
+    dispatchConfigData({ type: "changePan", pan: false });
+  };
+
   useEffect(() => {
     let canvas: HTMLCanvasElement = document.querySelector(
       `#${candlesCanvasId}`,
@@ -126,6 +151,10 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     let rangeSelector = document.querySelector(
       `#${chartId}-range-selector`,
     ) as HTMLElement;
+
+    canvas?.addEventListener("touchmove", touchMove);
+    mainSvgChart?.addEventListener("touchstart", touchStart);
+    mainSvgChart?.addEventListener("touchend", touchEnd);
 
     canvas?.addEventListener("mousemove", mouseMove);
     canvas?.addEventListener("mouseenter", mouseEnterCanvas);
@@ -139,6 +168,10 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     rangeSelector?.addEventListener("mouseenter", mouseEnterRSChart);
 
     return () => {
+      canvas?.removeEventListener("touchmove", touchMove);
+      mainSvgChart?.removeEventListener("touchstart", touchStart);
+      mainSvgChart?.removeEventListener("touchend", touchEnd);
+
       canvas?.removeEventListener("mousemove", mouseMove);
       canvas?.removeEventListener("mouseenter", mouseEnterCanvas);
 
@@ -150,7 +183,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
       rangeSelector?.removeEventListener("mousemove", mouseLeave);
       rangeSelector?.removeEventListener("mouseenter", mouseEnterRSChart);
     };
-  }, [onRSChart]);
+  }, [onRSChart, config.pan]);
 
   useEffect(() => {
     if (config.canvasWidth && config.canvasHeight) {
