@@ -59,7 +59,6 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   const dispatchConfigData: Dispatch<ConfigDataActionType> =
     useConfigDispatch();
 
-  const [showLines, setShowsLines] = useState<boolean>(false);
   const [positionX, setPositionX] = useState<number>(0);
   const [positionY, setPositionY] = useState<number>(0);
   const [updateZoom, setUpdateZoom] = useState<"down" | "up" | false>(false);
@@ -86,31 +85,37 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   const [firstRender, setFirstRender] = useState<boolean>(true);
 
   const mouseMove = (evt: MouseEvent) => {
-    setShowsLines(true);
+    dispatchDataViewer({ type: "changeShowLines", showLines: true });
     let point = getCursorPoint(candlesCanvasId, evt);
     setPositionX(point.x);
     setPositionY(point.y);
   };
 
   const touchMove = (evt: TouchEvent) => {
-    setShowsLines(false);
+    dispatchDataViewer({ type: "changeShowLines", showLines: false });
     dispatchConfigData({ type: "changePan", pan: true });
     if (config.pan) {
       let point = getTouchPoint(candlesCanvasId, evt);
       setPositionX(point.x);
       setPositionY(point.y);
     }
+    dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
+  };
+
+  const touchEnd = (evt: TouchEvent) => {
+    evt.preventDefault();
+    dispatchConfigData({ type: "changePan", pan: false });
   };
 
   const touchStart = (evt: TouchEvent) => {
-    setShowsLines(true);
+    dispatchDataViewer({ type: "changeShowLines", showLines: true });
     let point = getTouchPoint(candlesCanvasId, evt);
     setPositionX(point.x);
     setPositionY(point.y);
   };
 
   const mouseLeave = () => {
-    setShowsLines(false);
+    dispatchDataViewer({ type: "changeShowLines", showLines: false });
     dispatchConfigData({ type: "changePan", pan: false });
     dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
   };
@@ -135,10 +140,6 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   const canvasMouseUp = () => {
     dispatchConfigData({ type: "changePan", pan: false });
     dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
-  };
-
-  const touchEnd = () => {
-    dispatchConfigData({ type: "changePan", pan: false });
   };
 
   useEffect(() => {
@@ -255,7 +256,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
         data.zoomFactor * data.incrementZoomFactor > scrollZoom.max
       )
         return;
-      setShowsLines(false);
+      dispatchDataViewer({ type: "changeShowLines", showLines: false });
       let target =
         dataViewer.candleIndex === -1
           ? xScaleFunction.invert(positionX).getTime()
@@ -314,7 +315,7 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
   return (
     <>
-      {showLines && !config.pan ? (
+      {dataViewer.showLines && !config.pan ? (
         <>
           <line
             strokeDasharray={"2,2"}

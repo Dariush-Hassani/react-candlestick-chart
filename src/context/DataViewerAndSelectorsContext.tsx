@@ -6,6 +6,7 @@ import React, { createContext, Dispatch, useContext, useReducer } from "react";
 
 const initData: DataViewerAndSelectorsContextType = {
   candleIndex: -1,
+  showLines: false,
 };
 
 const DataViewerAndSelectorsContext =
@@ -21,6 +22,10 @@ function dataViewerAndSelectorsReducer(
   if (action.type === "changeCandleIndex") {
     let newState = { ...state };
     newState.candleIndex = action.candleIndex;
+    return newState;
+  } else if (action.type === "changeShowLines") {
+    let newState = { ...state };
+    newState.showLines = action.showLines;
     return newState;
   } else {
     return state;

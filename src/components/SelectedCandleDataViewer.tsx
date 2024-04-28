@@ -14,23 +14,23 @@ const SelectedCandleDataViewer: React.FC<{
   decimal: number;
 }> = ({ dataViewerTexts, dataViewerColors, decimal }) => {
   const data: DataContextType = useData();
-  const selectedCandleIndex: DataViewerAndSelectorsContextType =
+  const dataViewer: DataViewerAndSelectorsContextType =
     useDataViewerAndSelectors();
-  const showCandleInfo = selectedCandleIndex.candleIndex !== -1;
+  const showCandleInfo = dataViewer.candleIndex !== -1;
   const config: ConfigDataContextType = useConfigData();
 
   const selectedData = showCandleInfo
-    ? data.shownData[selectedCandleIndex.candleIndex]
+    ? data.shownData[dataViewer.candleIndex]
     : null;
 
   const isUp: boolean =
     showCandleInfo &&
-    data.shownData[selectedCandleIndex.candleIndex]?.open >
-      data.shownData[selectedCandleIndex.candleIndex]?.close;
+    data.shownData[dataViewer.candleIndex]?.open >
+      data.shownData[dataViewer.candleIndex]?.close;
 
   return (
     <>
-      {showCandleInfo && !config.pan ? (
+      {showCandleInfo && !config.pan && dataViewer.showLines ? (
         <>
           <div
             style={{
