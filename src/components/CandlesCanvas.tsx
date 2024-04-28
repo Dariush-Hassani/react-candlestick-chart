@@ -164,7 +164,7 @@ const CandlesCanvas: React.FC<{
           createCandle(candleWidth, data.shownData[i]);
       }
     }
-  }, [context2D.current, candleWidth, data.shownData]);
+  }, [context2D.current, candleWidth, data.shownData, config.canvasHeight]);
 
   return (
     <canvas
