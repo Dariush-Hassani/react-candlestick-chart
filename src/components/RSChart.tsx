@@ -36,9 +36,19 @@ const RSChart: React.FC<{
   };
 
   const touchMove = (evt: TouchEvent) => {
+    if (!pan) {
+      setPan(true);
+    }
     let point = getTouchPoint(candlesCanvasId, evt);
     setPositionX(point.x);
   };
+
+  const touchStart = (evt: TouchEvent) => {
+    let point = getTouchPoint(candlesCanvasId, evt);
+    setPositionX(point.x);
+  };
+
+  const touchEnd = () => setPan(false);
 
   const leftPanMouseDown = () => setLeftPan(true);
   const rightPanMouseDown = () => setRightPan(true);
@@ -68,6 +78,8 @@ const RSChart: React.FC<{
     RSChart.addEventListener("mouseleave", panMouseUp);
     RSChart.addEventListener("mousemove", mouseMove);
     RSChart.addEventListener("touchmove", touchMove);
+    RSChart.addEventListener("touchstart", touchStart);
+    RSChart.addEventListener("touchend", touchEnd);
 
     return () => {
       panArea.removeEventListener("mousedown", panMouseDown);
@@ -83,8 +95,10 @@ const RSChart: React.FC<{
       RSChart.removeEventListener("mouseleave", panMouseUp);
       RSChart.removeEventListener("mousemove", mouseMove);
       RSChart.removeEventListener("touchmove", touchMove);
+      RSChart.removeEventListener("touchstart", touchStart);
+      RSChart.removeEventListener("touchend", touchEnd);
     };
-  }, []);
+  }, [pan]);
 
   useEffect(() => {
     if (pan) {
