@@ -15,10 +15,12 @@ const CandlesCanvas: React.FC<{
   const data: DataContextType = useData();
   const context2D = useRef<CanvasRenderingContext2D | null>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
+  const scale = 3;
 
   const createCandle = (candleWidth: number, candleData: dataType) => {
     if (Number.isNaN(candleWidth) || !candleWidth) return;
     let ctx = context2D.current as CanvasRenderingContext2D;
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
     //candle body
     let width = candleWidth;
@@ -168,11 +170,15 @@ const CandlesCanvas: React.FC<{
 
   return (
     <canvas
-      width={config.canvasWidth}
-      height={config.canvasHeight}
+      width={(config.canvasWidth as number) * scale}
+      height={(config.canvasHeight as number) * scale}
       ref={canvas}
       id={id}
-      style={{ cursor: config.pan ? "all-scroll" : "" }}
+      style={{
+        width: config.canvasWidth + "px",
+        height: config.canvasHeight + "px",
+        cursor: config.pan ? "all-scroll" : "",
+      }}
     ></canvas>
   );
 };
