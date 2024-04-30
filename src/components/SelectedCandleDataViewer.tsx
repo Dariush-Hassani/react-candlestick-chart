@@ -129,7 +129,7 @@ const SelectedCandleDataViewer: React.FC<{
               style={{
                 position: "absolute",
                 left: "25px",
-                top: config.isMobile ? "80px" : "30px",
+                top: config.isMobile ? "105px" : "30px",
                 fontFamily: "monospace",
                 display: config.isMobile ? "block" : "flex",
                 gap: "10px",
