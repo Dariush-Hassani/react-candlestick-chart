@@ -128,8 +128,6 @@ function dataReducer(state: DataContextType, action: DataActionType) {
           x.date > newShownRange.start - state.candleWidthDate / 2,
       );
 
-      let shownDates = newShownData.map((x) => x.date);
-
       let slPrices: number[] = newShownData
         .filter((x) => x.position && typeof x.position?.sl !== undefined)
         .map((x) => x.position?.sl as number);
@@ -156,9 +154,6 @@ function dataReducer(state: DataContextType, action: DataActionType) {
         ? newMinMaxShownPrice[1]
         : 0;
 
-      let [newCandleWidthDate, newCandleLockerWidthDate] =
-        calculateCandleWidthDate(shownDates);
-
       let newState = { ...state };
 
       newState.shownData = newShownData;
@@ -172,12 +167,6 @@ function dataReducer(state: DataContextType, action: DataActionType) {
       };
       newState.shownRange = newShownRange;
       newState.zoomFactor = newZoomFactor;
-      newState.candleWidthDate = isNaN(newCandleWidthDate)
-        ? state.candleWidthDate
-        : newCandleWidthDate;
-      newState.candleLockerWidthDate = isNaN(newCandleLockerWidthDate)
-        ? state.candleLockerWidthDate
-        : newCandleLockerWidthDate;
 
       return newState;
     }
