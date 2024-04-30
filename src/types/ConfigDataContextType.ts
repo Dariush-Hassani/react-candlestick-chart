@@ -10,6 +10,7 @@ export type ConfigDataContextType = {
   emptySpaceFromTopPercentRS: number;
   emptySpaceFromBottomPercentRS: number;
   pan: boolean;
+  responsiveBreakPoint: number;
 };
 
 export type ConfigDataActionType =
@@ -24,4 +25,8 @@ export type ConfigDataActionType =
       type: "changeDecimal";
       decimal: number;
     }
-  | { type: "changePan"; pan: boolean };
+  | { type: "changePan"; pan: boolean }
+  | {
+      type: "changeResponsiveBreakPoint";
+      responsiveBreakPoint: number;
+    };

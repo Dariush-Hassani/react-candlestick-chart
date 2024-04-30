@@ -34,6 +34,7 @@ const CandlestickChartController: React.FC<{
     enable: boolean;
     height: number;
   };
+  responsiveBreakPoint: number;
 }> = ({
   chartData,
   id,
@@ -44,6 +45,7 @@ const CandlestickChartController: React.FC<{
   dataViewerColors,
   scrollZoom,
   rangeSelector,
+  responsiveBreakPoint,
 }) => {
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
@@ -69,6 +71,13 @@ const CandlestickChartController: React.FC<{
       decimal: decimal,
     });
   }, [decimal]);
+
+  useEffect(() => {
+    dispatchConfig({
+      type: "changeResponsiveBreakPoint",
+      responsiveBreakPoint: responsiveBreakPoint,
+    });
+  }, [responsiveBreakPoint]);
 
   useEffect(() => {
     let newYScaleFunction = d3

@@ -22,6 +22,7 @@ const CandlestickChart: React.FC<{
     enable: boolean;
     height: number;
   };
+  responsiveBreakPoint?: number;
 }> = ({
   data,
   id,
@@ -32,6 +33,7 @@ const CandlestickChart: React.FC<{
   dataViewerColors,
   scrollZoom,
   rangeSelector,
+  responsiveBreakPoint,
 }) => {
   return (
     <DataProvider>
@@ -43,6 +45,7 @@ const CandlestickChart: React.FC<{
             width={width}
             height={height}
             decimal={decimal ?? 0}
+            responsiveBreakPoint={responsiveBreakPoint ?? 400}
             scrollZoom={{
               enable: scrollZoom ? scrollZoom.enable : false,
               max: scrollZoom ? scrollZoom.max : 1,

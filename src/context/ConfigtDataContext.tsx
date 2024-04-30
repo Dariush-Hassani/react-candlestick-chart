@@ -16,6 +16,7 @@ const initData: ConfigDataContextType = {
   emptySpaceFromTopPercentRS: 2 / 100,
   chartHeight: 0,
   pan: false,
+  responsiveBreakPoint: 0,
 };
 const ConfigDataContext = createContext<ConfigDataContextType>(initData);
 const ConfigDispatchContext = createContext<Dispatch<ConfigDataActionType>>(
@@ -40,6 +41,10 @@ function dataReducer(
   } else if (action.type === "changePan") {
     let newState = { ...state };
     newState.pan = action.pan;
+    return newState;
+  } else if (action.type === "changeResponsiveBreakPoint") {
+    let newState = { ...state };
+    newState.responsiveBreakPoint = action.responsiveBreakPoint;
     return newState;
   } else {
     return state;
