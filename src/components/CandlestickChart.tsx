@@ -21,6 +21,7 @@ const CandlestickChart: React.FC<{
   rangeSelector?: {
     enable: boolean;
     height: number;
+    initialRange?: number;
   };
   responsiveBreakPoint?: number;
 }> = ({
@@ -53,6 +54,10 @@ const CandlestickChart: React.FC<{
             rangeSelector={{
               enable: rangeSelector ? rangeSelector.enable : false,
               height: rangeSelector ? rangeSelector.height : 0,
+              initialRange:
+                rangeSelector && rangeSelector.initialRange
+                  ? rangeSelector.initialRange
+                  : 100,
             }}
             dataViewerTexts={{
               shortPosition: dataViewerTexts?.shortPosition ?? "Short",

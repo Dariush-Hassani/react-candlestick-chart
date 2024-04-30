@@ -28,6 +28,7 @@ function App() {
       rangeSelector={{
         enable: true,
         height: 150,
+        initialRange: 30,
       }}
       responsiveBreakPoint={450}
     />

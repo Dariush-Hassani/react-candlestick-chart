@@ -33,6 +33,7 @@ const CandlestickChartController: React.FC<{
   rangeSelector: {
     enable: boolean;
     height: number;
+    initialRange: number;
   };
   responsiveBreakPoint: number;
 }> = ({
@@ -84,6 +85,24 @@ const CandlestickChartController: React.FC<{
       .range([0, config.canvasHeight ?? 0]);
     setYScaleFunction(() => newYScaleFunction);
   }, [data.minMaxShownPrice, config.canvasHeight]);
+
+  useEffect(() => {
+    if (
+      rangeSelector.initialRange < 100 &&
+      rangeSelector.initialRange > 0 &&
+      data.initData.length >= 2
+    ) {
+      let lastDate = data.initData[data.initData.length - 1].date;
+      let firstDate = data.initData[0].date;
+      let range = lastDate - firstDate;
+      range *= rangeSelector.initialRange / 100;
+      let newStartRange = lastDate - range;
+      dispatchData({
+        type: "changeShownRange",
+        shownRange: { start: newStartRange, end: lastDate },
+      });
+    }
+  }, [rangeSelector.initialRange, data.initData]);
 
   useEffect(() => {
     let newXScaleFunction = d3
