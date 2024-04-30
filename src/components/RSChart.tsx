@@ -29,25 +29,14 @@ const RSChart: React.FC<{
   const [leftDistanceToTarget, setLeftDistanceToTarget] = useState<number>(0);
   const [panAreaWidth, setPanAreaWidth] = useState<number>(0);
   const [sizer, setSizer] = useState<number>(4);
-  const [screenWidth, setScreenWidth] = useState<number>(0);
-
-  const changeWidth = () => {
-    setScreenWidth(window.innerWidth);
-  };
-  useEffect(() => {
-    window.addEventListener("resize", changeWidth);
-    return () => {
-      window.removeEventListener("resize", changeWidth);
-    };
-  }, []);
 
   useEffect(() => {
-    if (screenWidth < config.responsiveBreakPoint) {
+    if (config.isMobile) {
       setSizer(20);
     } else {
       setSizer(4);
     }
-  }, [config.responsiveBreakPoint, screenWidth]);
+  }, [config.isMobile]);
 
   const mouseMove = (evt: MouseEvent) => {
     let point = getCursorPoint(candlesCanvasId, evt);

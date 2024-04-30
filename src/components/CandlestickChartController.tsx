@@ -73,13 +73,6 @@ const CandlestickChartController: React.FC<{
   }, [decimal]);
 
   useEffect(() => {
-    dispatchConfig({
-      type: "changeResponsiveBreakPoint",
-      responsiveBreakPoint: responsiveBreakPoint,
-    });
-  }, [responsiveBreakPoint]);
-
-  useEffect(() => {
     let newYScaleFunction = d3
       .scaleLinear()
       .domain([
@@ -139,6 +132,7 @@ const CandlestickChartController: React.FC<{
       RSYScaleFunction={RSYScaleFunction}
       RSXScaleFunction={RSXScaleFunction}
       candlesCanvasId={candlesCanvasId}
+      responsiveBreakPoint={responsiveBreakPoint}
       chartElement={
         <foreignObject width={config.canvasWidth} height={config.canvasHeight}>
           <CandlesCanvas

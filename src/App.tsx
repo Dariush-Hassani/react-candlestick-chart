@@ -29,6 +29,7 @@ function App() {
         enable: true,
         height: 150,
       }}
+      responsiveBreakPoint={450}
     />
   );
 }

@@ -7,6 +7,7 @@ import { DataViewerAndSelectorsContextType } from "../types/DataViewerAndSelecto
 import { useDataViewerAndSelectors } from "../context/DataViewerAndSelectorsContext";
 import { ConfigDataContextType } from "../types/ConfigDataContextType";
 import { useConfigData } from "../context/ConfigtDataContext";
+import { colors } from "../utils/Colors";
 
 const SelectedCandleDataViewer: React.FC<{
   dataViewerTexts: DataViewerTextsType;
@@ -31,103 +32,147 @@ const SelectedCandleDataViewer: React.FC<{
   return (
     <>
       {showCandleInfo && !config.pan && dataViewer.showLines ? (
-        <>
+        <div>
           <div
             style={{
               position: "absolute",
               left: "25px",
               top: "10px",
               fontFamily: "monospace",
+              display: config.isMobile ? "block" : "flex",
+              gap: "10px",
             }}
           >
-            <span style={{ color: dataViewerColors.openLabel }}>
-              {dataViewerTexts.open}
-            </span>
-            <span
+            <div
               style={{
-                color: isUp
-                  ? dataViewerColors.openDataUp
-                  : dataViewerColors.openDataDown,
+                background: config.isMobile ? colors.background : "",
+                padding: config.isMobile ? "4px 0" : "0",
               }}
             >
-              {" "}
-              {selectedData?.open.toFixed(decimal)}{" "}
-            </span>
-            <span style={{ color: dataViewerColors.highLabel }}>
-              {dataViewerTexts.high}
-            </span>
-            <span
+              <span style={{ color: dataViewerColors.openLabel }}>
+                {dataViewerTexts.open}
+              </span>
+              <span
+                style={{
+                  color: isUp
+                    ? dataViewerColors.openDataUp
+                    : dataViewerColors.openDataDown,
+                }}
+              >
+                {" "}
+                {selectedData?.open.toFixed(decimal)}{" "}
+              </span>
+            </div>
+            <div
               style={{
-                color: isUp
-                  ? dataViewerColors.highDataUp
-                  : dataViewerColors.highDataDown,
+                background: config.isMobile ? colors.background : "",
+                padding: config.isMobile ? "4px 0" : "0",
               }}
             >
-              {" "}
-              {selectedData?.high.toFixed(decimal)}{" "}
-            </span>
-            <span style={{ color: dataViewerColors.lowLabel }}>
-              {dataViewerTexts.low}
-            </span>
-            <span
+              <span style={{ color: dataViewerColors.highLabel }}>
+                {dataViewerTexts.high}
+              </span>
+              <span
+                style={{
+                  color: isUp
+                    ? dataViewerColors.highDataUp
+                    : dataViewerColors.highDataDown,
+                }}
+              >
+                {" "}
+                {selectedData?.high.toFixed(decimal)}{" "}
+              </span>
+            </div>
+            <div
               style={{
-                color: isUp
-                  ? dataViewerColors.lowDataUp
-                  : dataViewerColors.lowDataDown,
+                background: config.isMobile ? colors.background : "",
+                padding: config.isMobile ? "4px 0" : "0",
               }}
             >
-              {" "}
-              {selectedData?.low.toFixed(decimal)}{" "}
-            </span>
-            <span style={{ color: dataViewerColors.closeLabel }}>
-              {dataViewerTexts.close}
-            </span>
-            <span
+              <span style={{ color: dataViewerColors.lowLabel }}>
+                {dataViewerTexts.low}
+              </span>
+              <span
+                style={{
+                  color: isUp
+                    ? dataViewerColors.lowDataUp
+                    : dataViewerColors.lowDataDown,
+                }}
+              >
+                {" "}
+                {selectedData?.low.toFixed(decimal)}{" "}
+              </span>
+            </div>
+            <div
               style={{
-                color: isUp
-                  ? dataViewerColors.closeDataUp
-                  : dataViewerColors.closeDataDown,
+                background: config.isMobile ? colors.background : "",
+                padding: config.isMobile ? "4px 0" : "0",
               }}
             >
-              {" "}
-              {selectedData?.close.toFixed(decimal)}{" "}
-            </span>
+              <span style={{ color: dataViewerColors.closeLabel }}>
+                {dataViewerTexts.close}
+              </span>
+              <span
+                style={{
+                  color: isUp
+                    ? dataViewerColors.closeDataUp
+                    : dataViewerColors.closeDataDown,
+                }}
+              >
+                {" "}
+                {selectedData?.close.toFixed(decimal)}{" "}
+              </span>
+            </div>
           </div>
           {selectedData && selectedData.position ? (
             <div
               style={{
                 position: "absolute",
                 left: "25px",
-                top: "30px",
+                top: config.isMobile ? "80px" : "30px",
                 fontFamily: "monospace",
+                display: config.isMobile ? "block" : "flex",
+                gap: "10px",
               }}
             >
-              <span
+              <div
                 style={{
-                  color:
-                    selectedData.position.positionType === "short"
-                      ? dataViewerColors.shortPositionLabel
-                      : dataViewerColors.longPositionLabel,
+                  background: config.isMobile ? colors.background : "",
+                  padding: config.isMobile ? "4px 0" : "0",
                 }}
               >
-                {" "}
-                {selectedData.position.positionType === "short"
-                  ? dataViewerTexts.shortPosition
-                  : dataViewerTexts.longPosition}
-              </span>
-              <span
-                style={{
-                  color:
-                    selectedData.position.positionType === "short"
-                      ? dataViewerColors.shortPositionData
-                      : dataViewerColors.longPositionData,
-                }}
-              >
-                {" "}
-                {selectedData.position.positionValue.toFixed(decimal)}
-              </span>
+                <span
+                  style={{
+                    color:
+                      selectedData.position.positionType === "short"
+                        ? dataViewerColors.shortPositionLabel
+                        : dataViewerColors.longPositionLabel,
+                  }}
+                >
+                  {" "}
+                  {selectedData.position.positionType === "short"
+                    ? dataViewerTexts.shortPosition
+                    : dataViewerTexts.longPosition}
+                </span>
+                <span
+                  style={{
+                    color:
+                      selectedData.position.positionType === "short"
+                        ? dataViewerColors.shortPositionData
+                        : dataViewerColors.longPositionData,
+                  }}
+                >
+                  {" "}
+                  {selectedData.position.positionValue.toFixed(decimal)}
+                </span>
+              </div>
               {selectedData.position.sl ? (
-                <>
+                <div
+                  style={{
+                    background: config.isMobile ? colors.background : "",
+                    padding: config.isMobile ? "4px 0" : "0",
+                  }}
+                >
                   <span
                     style={{
                       color: dataViewerColors.stopLossLabel,
@@ -144,12 +189,17 @@ const SelectedCandleDataViewer: React.FC<{
                     {" "}
                     {selectedData.position.sl.toFixed(decimal)}
                   </span>
-                </>
+                </div>
               ) : (
                 <></>
               )}
               {selectedData.position.tp ? (
-                <>
+                <div
+                  style={{
+                    background: config.isMobile ? colors.background : "",
+                    padding: config.isMobile ? "4px 0" : "0",
+                  }}
+                >
                   <span
                     style={{
                       color: dataViewerColors.takeProfitLabel,
@@ -166,7 +216,7 @@ const SelectedCandleDataViewer: React.FC<{
                     {" "}
                     {selectedData.position.tp.toFixed(decimal)}
                   </span>
-                </>
+                </div>
               ) : (
                 <></>
               )}
@@ -174,7 +224,7 @@ const SelectedCandleDataViewer: React.FC<{
           ) : (
             <></>
           )}
-        </>
+        </div>
       ) : (
         <></>
       )}

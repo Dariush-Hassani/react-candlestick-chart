@@ -10,7 +10,7 @@ export type ConfigDataContextType = {
   emptySpaceFromTopPercentRS: number;
   emptySpaceFromBottomPercentRS: number;
   pan: boolean;
-  responsiveBreakPoint: number;
+  isMobile: boolean;
 };
 
 export type ConfigDataActionType =
@@ -27,6 +27,6 @@ export type ConfigDataActionType =
     }
   | { type: "changePan"; pan: boolean }
   | {
-      type: "changeResponsiveBreakPoint";
-      responsiveBreakPoint: number;
+      type: "changeIsMobile";
+      isMobile: boolean;
     };

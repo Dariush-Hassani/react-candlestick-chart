@@ -34,6 +34,7 @@ const Layout: React.FC<{
   };
   candlesCanvasId: string;
   chartElement: SVGProps<SVGForeignObjectElement>;
+  responsiveBreakPoint: number;
 }> = ({
   id,
   width,
@@ -49,6 +50,7 @@ const Layout: React.FC<{
   RSYScaleFunction,
   RSXScaleFunction,
   candlesCanvasId,
+  responsiveBreakPoint,
 }) => {
   const yAxisId = `${id}-yAxis`;
   const xAxisId = `${id}-xAxis`;
@@ -82,6 +84,13 @@ const Layout: React.FC<{
       });
     }
   }, [width, height, config.decimal, rangeSelector.height]);
+
+  useEffect(() => {
+    dispatchConfig({
+      type: "changeIsMobile",
+      isMobile: width < responsiveBreakPoint,
+    });
+  }, [width, height, responsiveBreakPoint]);
 
   useEffect(() => {
     if (yScaleFunction) {
