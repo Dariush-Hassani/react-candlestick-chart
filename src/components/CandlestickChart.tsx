@@ -26,6 +26,7 @@ const CandlestickChart: React.FC<{
       value: number;
     };
   };
+  enableResetButton?: boolean;
   responsiveBreakPoint?: number;
 }> = ({
   data,
@@ -38,6 +39,7 @@ const CandlestickChart: React.FC<{
   scrollZoom,
   rangeSelector,
   responsiveBreakPoint,
+  enableResetButton = true,
 }) => {
   return (
     <DataProvider>
@@ -62,6 +64,7 @@ const CandlestickChart: React.FC<{
                   ? rangeSelector.initialRange
                   : { type: "percent", value: 100 },
             }}
+            enableResetButton={enableResetButton}
             dataViewerTexts={{
               shortPosition: dataViewerTexts?.shortPosition ?? "Short",
               longPosition: dataViewerTexts?.longPosition ?? "Long",

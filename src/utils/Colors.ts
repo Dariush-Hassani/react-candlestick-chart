@@ -14,4 +14,5 @@ export const colors = {
   RSChartStroke: "#04F5F9",
   RSChartOverlay: "#000",
   RSChartOverlayResize: "#e13443",
+  resetButtonColor: "#04F5F9",
 };

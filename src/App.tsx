@@ -28,9 +28,10 @@ function App() {
       rangeSelector={{
         enable: true,
         height: 150,
-        initialRange: { type: "hour", value: 48 },
+        initialRange: { type: "month", value: 1 },
       }}
       responsiveBreakPoint={450}
+      enableResetButton={true}
     />
   );
 }

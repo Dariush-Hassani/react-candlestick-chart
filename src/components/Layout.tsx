@@ -1,5 +1,5 @@
 import React, { Dispatch, SVGProps, useEffect, useMemo } from "react";
-import { useData } from "../context/DataContext";
+import { useData, useDataDispatch } from "../context/DataContext";
 import {
   useConfigData,
   useConfigDispatch,
@@ -10,11 +10,12 @@ import {
   ConfigDataActionType,
   ConfigDataContextType,
 } from "../types/ConfigDataContextType";
-import { DataContextType } from "../types/DataContextType";
+import { DataActionType, DataContextType } from "../types/DataContextType";
 import SelectedCandleDataViewer from "./SelectedCandleDataViewer";
 import { DataViewerTextsType } from "../types/DataViewerTextsType";
 import { DataViewerColorsType } from "../types/DataViewerColorsType";
 import RSChart from "./RSChart";
+import dataType from "../types/DataType";
 
 const Layout: React.FC<{
   id: string;
@@ -28,13 +29,18 @@ const Layout: React.FC<{
   dataViewerTexts: DataViewerTextsType;
   dataViewerColors: DataViewerColorsType;
   decimal: number;
-  rangeSelector: {
-    enable: boolean;
-    height: number;
-  };
   candlesCanvasId: string;
   chartElement: SVGProps<SVGForeignObjectElement>;
   responsiveBreakPoint: number;
+  enableResetButton: boolean;
+  rangeSelector: {
+    enable: boolean;
+    height: number;
+    initialRange: {
+      type: "month" | "day" | "hour" | "percent" | "milliseconds";
+      value: number;
+    };
+  };
 }> = ({
   id,
   width,
@@ -45,19 +51,24 @@ const Layout: React.FC<{
   dataViewerTexts,
   dataViewerColors,
   decimal,
-  rangeSelector,
   chartElement,
   RSYScaleFunction,
   RSXScaleFunction,
   candlesCanvasId,
   responsiveBreakPoint,
+  enableResetButton,
+  rangeSelector,
 }) => {
   const yAxisId = `${id}-yAxis`;
   const xAxisId = `${id}-xAxis`;
   const yAxisIdRS = `${yAxisId}-RS`;
   const xAxisIdRS = `${xAxisId}-RS`;
 
+  const resetBtnId = `${id}-reset-btn`;
+
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
+  const dispatchData: Dispatch<DataActionType> = useDataDispatch();
+
   const data: DataContextType = useData();
   const config: ConfigDataContextType = useConfigData();
 
@@ -71,6 +82,86 @@ const Layout: React.FC<{
         config.characterFontWidth,
     [data.minMaxInitPrice.max, config.decimal],
   );
+
+  const initialRangeCalculator = (
+    initialRange: {
+      type: "month" | "day" | "hour" | "percent" | "milliseconds";
+      value: number;
+    },
+    initData: dataType[],
+    candleWidthDate: number,
+  ) => {
+    if (initData.length < 2 || !initialRange || !candleWidthDate) return;
+
+    if (initialRange.type === "percent") {
+      let val;
+      if (initialRange.value > 100) val = 100;
+      else if (initialRange.value <= 0.1) val = 0.1;
+      else val = initialRange.value;
+
+      let lastDate = initData[initData.length - 1].date;
+      let firstDate = initData[0].date;
+      let range = lastDate - firstDate;
+      range *= val / 100;
+      let newStartRange = lastDate - range;
+      dispatchData({
+        type: "changeShownRange",
+        shownRange: {
+          start: newStartRange + candleWidthDate / 2,
+          end: lastDate + candleWidthDate / 2,
+        },
+      });
+    } else {
+      let rangeInMilliSeconds = 0;
+      let val = initialRange.value <= 0 ? 0 : initialRange.value;
+      let coeff = 3.6 * Math.pow(10, 6);
+      if (initialRange.type === "milliseconds") rangeInMilliSeconds = val;
+      else if (initialRange.type === "hour") rangeInMilliSeconds = val * coeff;
+      else if (initialRange.type === "day")
+        rangeInMilliSeconds = val * coeff * 24;
+      else if (initialRange.type === "month")
+        rangeInMilliSeconds = val * coeff * 24 * 30;
+
+      let lastDate = initData[initData.length - 1].date;
+      let firstDate = initData[0].date;
+
+      let startRange = lastDate - rangeInMilliSeconds;
+      let endRange = lastDate;
+
+      if (startRange < firstDate) startRange = firstDate;
+
+      dispatchData({
+        type: "changeShownRange",
+        shownRange: {
+          start: startRange + candleWidthDate / 2,
+          end: endRange + candleWidthDate / 2,
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    let resetBtn = document.getElementById(`${resetBtnId}`);
+    let resetHandler = () => {
+      initialRangeCalculator(
+        rangeSelector.initialRange,
+        data.initData,
+        data.candleWidthDate,
+      );
+    };
+
+    resetHandler();
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", resetHandler);
+    }
+
+    return () => {
+      if (resetBtn) {
+        resetBtn.removeEventListener("click", resetHandler);
+      }
+    };
+  }, [rangeSelector.initialRange, data.initData, data.candleWidthDate]);
 
   useEffect(() => {
     if (width !== 0 && height !== 0) {
@@ -179,6 +270,37 @@ const Layout: React.FC<{
         background: colors.background,
       }}
     >
+      {enableResetButton ? (
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "0",
+            justifyContent: "end",
+          }}
+        >
+          <div
+            style={{
+              height: "25px",
+              width: "25px",
+              marginTop: "10px",
+              position: "relative",
+              zIndex: 10,
+              cursor: "pointer",
+              borderRadius: 2,
+              border: "1px solid",
+              borderColor: `${colors.resetButtonColor}`,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+            id={`${resetBtnId}`}
+          ></div>
+        </div>
+      ) : (
+        <></>
+      )}
       <SelectedCandleDataViewer
         decimal={decimal}
         dataViewerTexts={dataViewerTexts}
