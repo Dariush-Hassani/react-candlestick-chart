@@ -281,8 +281,6 @@ const Layout: React.FC<{
         >
           <div
             style={{
-              height: "25px",
-              width: "25px",
               marginTop: "10px",
               position: "relative",
               zIndex: 10,
@@ -290,13 +288,19 @@ const Layout: React.FC<{
               borderRadius: 2,
               border: "1px solid",
               borderColor: `${colors.resetButtonColor}`,
+              color: `${colors.resetButtonColor}`,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               overflow: "hidden",
+              fontFamily: "monospace",
+              fontSize: "12px",
+              padding: "10px",
             }}
             id={`${resetBtnId}`}
-          ></div>
+          >
+            Reset
+          </div>
         </div>
       ) : (
         <></>
