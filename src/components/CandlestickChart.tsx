@@ -21,7 +21,10 @@ const CandlestickChart: React.FC<{
   rangeSelector?: {
     enable: boolean;
     height: number;
-    initialRange?: number;
+    initialRange?: {
+      type: "month" | "day" | "hour" | "percent" | "milliseconds";
+      value: number;
+    };
   };
   responsiveBreakPoint?: number;
 }> = ({
@@ -57,7 +60,7 @@ const CandlestickChart: React.FC<{
               initialRange:
                 rangeSelector && rangeSelector.initialRange
                   ? rangeSelector.initialRange
-                  : 100,
+                  : { type: "percent", value: 100 },
             }}
             dataViewerTexts={{
               shortPosition: dataViewerTexts?.shortPosition ?? "Short",

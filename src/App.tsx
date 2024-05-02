@@ -28,7 +28,7 @@ function App() {
       rangeSelector={{
         enable: true,
         height: 150,
-        initialRange: 30,
+        initialRange: { type: "hour", value: 48 },
       }}
       responsiveBreakPoint={450}
     />

@@ -33,7 +33,10 @@ const CandlestickChartController: React.FC<{
   rangeSelector: {
     enable: boolean;
     height: number;
-    initialRange: number;
+    initialRange: {
+      type: "month" | "day" | "hour" | "percent" | "milliseconds";
+      value: number;
+    };
   };
   responsiveBreakPoint: number;
 }> = ({
@@ -59,6 +62,63 @@ const CandlestickChartController: React.FC<{
 
   const [RSYScaleFunction, setRSYScaleFunction] = useState<any>(null);
   const [RSXScaleFunction, setRSXScaleFunction] = useState<any>(null);
+
+  const initialRangeCalculator = (
+    initialRange: {
+      type: "month" | "day" | "hour" | "percent" | "milliseconds";
+      value: number;
+    },
+    initData: dataType[],
+    candleWidthDate: number,
+  ) => {
+    if (initData.length < 2 || !initialRange || !candleWidthDate) return;
+
+    if (initialRange.type === "percent") {
+      let val;
+      if (initialRange.value > 100) val = 100;
+      else if (initialRange.value <= 0.1) val = 0.1;
+      else val = initialRange.value;
+
+      let lastDate = initData[initData.length - 1].date;
+      let firstDate = initData[0].date;
+      let range = lastDate - firstDate;
+      range *= val / 100;
+      let newStartRange = lastDate - range;
+      dispatchData({
+        type: "changeShownRange",
+        shownRange: {
+          start: newStartRange + candleWidthDate / 2,
+          end: lastDate + candleWidthDate / 2,
+        },
+      });
+    } else {
+      let rangeInMilliSeconds = 0;
+      let val = initialRange.value <= 0 ? 0 : initialRange.value;
+      let coeff = 3.6 * Math.pow(10, 6);
+      if (initialRange.type === "milliseconds") rangeInMilliSeconds = val;
+      else if (initialRange.type === "hour") rangeInMilliSeconds = val * coeff;
+      else if (initialRange.type === "day")
+        rangeInMilliSeconds = val * coeff * 24;
+      else if (initialRange.type === "month")
+        rangeInMilliSeconds = val * coeff * 24 * 30;
+
+      let lastDate = initData[initData.length - 1].date;
+      let firstDate = initData[0].date;
+
+      let startRange = lastDate - rangeInMilliSeconds;
+      let endRange = lastDate;
+
+      if (startRange < firstDate) startRange = firstDate;
+
+      dispatchData({
+        type: "changeShownRange",
+        shownRange: {
+          start: startRange + candleWidthDate / 2,
+          end: endRange + candleWidthDate / 2,
+        },
+      });
+    }
+  };
 
   useEffect(() => {
     dispatchData({
@@ -87,22 +147,12 @@ const CandlestickChartController: React.FC<{
   }, [data.minMaxShownPrice, config.canvasHeight]);
 
   useEffect(() => {
-    if (
-      rangeSelector.initialRange < 100 &&
-      rangeSelector.initialRange > 0 &&
-      data.initData.length >= 2
-    ) {
-      let lastDate = data.initData[data.initData.length - 1].date;
-      let firstDate = data.initData[0].date;
-      let range = lastDate - firstDate;
-      range *= rangeSelector.initialRange / 100;
-      let newStartRange = lastDate - range;
-      dispatchData({
-        type: "changeShownRange",
-        shownRange: { start: newStartRange, end: lastDate },
-      });
-    }
-  }, [rangeSelector.initialRange, data.initData]);
+    initialRangeCalculator(
+      rangeSelector.initialRange,
+      data.initData,
+      data.candleWidthDate,
+    );
+  }, [rangeSelector.initialRange, data.initData, data.candleWidthDate]);
 
   useEffect(() => {
     let newXScaleFunction = d3
