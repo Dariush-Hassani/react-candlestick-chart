@@ -76,7 +76,8 @@ const CandlesCanvas: React.FC<{
         );
         position.lineTo(
           xScaleFunction(candleData.date),
-          yScaleFunction(candleData.position.positionValue) - candleWidth / 1.5,
+          yScaleFunction(candleData.position.positionValue) -
+            (candleWidth / 1.5 > 20 ? 20 : candleWidth / 1.5),
         );
         ctx.fillStyle = colors.longPosition;
         ctx.strokeStyle = colors.longPosition;
@@ -91,7 +92,8 @@ const CandlesCanvas: React.FC<{
         );
         position.lineTo(
           xScaleFunction(candleData.date),
-          yScaleFunction(candleData.position.positionValue) + candleWidth / 1.5,
+          yScaleFunction(candleData.position.positionValue) +
+            (candleWidth / 1.5 > 20 ? 20 : candleWidth / 1.5),
         );
         ctx.fillStyle = colors.shortPosition;
         ctx.strokeStyle = colors.shortPosition;
