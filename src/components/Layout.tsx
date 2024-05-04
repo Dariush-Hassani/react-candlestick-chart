@@ -16,6 +16,8 @@ import { DataViewerTextsType } from "../types/DataViewerTextsType";
 import { DataViewerColorsType } from "../types/DataViewerColorsType";
 import RSChart from "./RSChart";
 import dataType from "../types/DataType";
+import { DataViewerAndSelectorsActionType } from "../types/DataViewerAndSelectorsContextType";
+import { useDataViewerAndSelectorsDispatch } from "../context/DataViewerAndSelectorsContext";
 
 const Layout: React.FC<{
   id: string;
@@ -68,6 +70,9 @@ const Layout: React.FC<{
 
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
+
+  const dispatchDataViewer: Dispatch<DataViewerAndSelectorsActionType> =
+    useDataViewerAndSelectorsDispatch();
 
   const data: DataContextType = useData();
   const config: ConfigDataContextType = useConfigData();
@@ -148,6 +153,7 @@ const Layout: React.FC<{
         data.initData,
         data.candleWidthDate,
       );
+      dispatchDataViewer({ type: "changeShowLines", showLines: false });
     };
 
     resetHandler();
