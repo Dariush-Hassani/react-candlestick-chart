@@ -1,4 +1,4 @@
-import React, { Dispatch, SVGProps, useEffect, useMemo } from "react";
+import React, { Dispatch, SVGProps, useEffect, useMemo, useState } from "react";
 import { useData, useDataDispatch } from "../context/DataContext";
 import {
   useConfigData,
@@ -67,6 +67,8 @@ const Layout: React.FC<{
   const xAxisIdRS = `${xAxisId}-RS`;
 
   const resetBtnId = `${id}-reset-btn`;
+
+  const [reset, setReset] = useState<boolean>(false);
 
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
@@ -145,16 +147,34 @@ const Layout: React.FC<{
     }
   };
 
+  let resetHandler = () => {
+    initialRangeCalculator(
+      rangeSelector.initialRange,
+      data.initData,
+      data.candleWidthDate,
+    );
+    dispatchDataViewer({ type: "changeShowLines", showLines: false });
+
+    setReset(true);
+  };
+
+  useEffect(() => {
+    if (reset) {
+      setTimeout(() => {
+        dispatchData({
+          type: "changeShownRange",
+          shownRange: {
+            start: data.shownRange.start + 1,
+            end: data.shownRange.end,
+          },
+        });
+      }, 10);
+      setReset(false);
+    }
+  }, [reset, data.shownRange]);
+
   useEffect(() => {
     let resetBtn = document.getElementById(`${resetBtnId}`);
-    let resetHandler = () => {
-      initialRangeCalculator(
-        rangeSelector.initialRange,
-        data.initData,
-        data.candleWidthDate,
-      );
-      dispatchDataViewer({ type: "changeShowLines", showLines: false });
-    };
 
     resetHandler();
 
