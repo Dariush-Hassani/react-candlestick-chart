@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, useEffect, useMemo, useRef, useState } from "react";
 import {
   findCandleIndex,
   getCursorPoint,
@@ -84,6 +84,11 @@ const CandlesSelectorLinesAndLabels: React.FC<{
 
   const [firstRender, setFirstRender] = useState<boolean>(true);
 
+  const zoomTouchDistanceStart = useRef<number>(0);
+  const zoomTouchDistanceEnd = useRef<number>(0);
+  const currentZoom = useRef<number>(0);
+  const inTouchZoom = useRef<boolean>(false);
+
   const mouseMove = (evt: MouseEvent) => {
     dispatchDataViewer({ type: "changeShowLines", showLines: true });
     let point = getCursorPoint(candlesCanvasId, evt);
@@ -92,27 +97,56 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   };
 
   const touchMove = (evt: TouchEvent) => {
+    evt.preventDefault();
     dispatchDataViewer({ type: "changeShowLines", showLines: false });
-    dispatchConfigData({ type: "changePan", pan: true });
-    if (config.pan) {
-      let point = getTouchPoint(candlesCanvasId, evt);
-      setPositionX(point.x);
-      setPositionY(point.y);
+    if (evt.touches.length === 1 && !inTouchZoom.current) {
+      dispatchConfigData({ type: "changePan", pan: true });
+      if (config.pan) {
+        let point = getTouchPoint(candlesCanvasId, evt);
+        setPositionX(point.x);
+        setPositionY(point.y);
+      }
+      dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
+    } else if (evt.touches.length === 2) {
+      inTouchZoom.current = true;
+      zoomTouchDistanceEnd.current = Math.hypot(
+        evt.touches[0].pageX - evt.touches[1].pageX,
+        evt.touches[0].pageY - evt.touches[1].pageY,
+      );
+      let diff = zoomTouchDistanceStart.current - zoomTouchDistanceEnd.current;
+      let coeffDiff = parseInt((diff / 3).toFixed(0));
+      if (coeffDiff > currentZoom.current) {
+        currentZoom.current = coeffDiff;
+        setUpdateZoom("down");
+      } else if (coeffDiff < currentZoom.current) {
+        currentZoom.current = coeffDiff;
+        setUpdateZoom("up");
+      }
     }
-    dispatchDataViewer({ type: "changeCandleIndex", candleIndex: -1 });
   };
 
   const touchEnd = (evt: TouchEvent) => {
     evt.preventDefault();
+    inTouchZoom.current = false;
     dispatchConfigData({ type: "changePan", pan: false });
+    zoomTouchDistanceStart.current = 0;
+    zoomTouchDistanceEnd.current = 0;
+    currentZoom.current = 0;
   };
 
   const touchStart = (evt: TouchEvent) => {
     if (onRSChart) return;
-    dispatchDataViewer({ type: "changeShowLines", showLines: true });
     let point = getTouchPoint(candlesCanvasId, evt);
     setPositionX(point.x);
     setPositionY(point.y);
+    if (evt.touches.length === 1) {
+      dispatchDataViewer({ type: "changeShowLines", showLines: true });
+    } else if (evt.touches.length === 2) {
+      zoomTouchDistanceStart.current = Math.hypot(
+        evt.touches[0].pageX - evt.touches[1].pageX,
+        evt.touches[0].pageY - evt.touches[1].pageY,
+      );
+    }
   };
 
   const mouseLeave = () => {
