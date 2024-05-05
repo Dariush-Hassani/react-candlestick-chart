@@ -4,8 +4,9 @@ import { useConfigData } from "../context/ConfigtDataContext";
 import { DataActionType, DataContextType } from "../types/DataContextType";
 import { useData, useDataDispatch } from "../context/DataContext";
 import * as d3 from "d3";
-import { colors } from "../utils/Colors";
 import { getCursorPoint, getTouchPoint } from "../utils/helperFunctions";
+import { ColorsType } from "../types/ColorsType";
+import { useColors } from "../context/ColorsContext";
 
 const RSChart: React.FC<{
   id: string;
@@ -30,6 +31,7 @@ const RSChart: React.FC<{
   const [panAreaWidth, setPanAreaWidth] = useState<number>(0);
   const [sizer, setSizer] = useState<number>(4);
 
+  const colors: ColorsType = useColors();
   useEffect(() => {
     if (config.isMobile) {
       setSizer(20);

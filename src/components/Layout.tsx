@@ -5,7 +5,6 @@ import {
   useConfigDispatch,
 } from "../context/ConfigtDataContext";
 import * as d3 from "d3";
-import { colors } from "../utils/Colors";
 import {
   ConfigDataActionType,
   ConfigDataContextType,
@@ -18,6 +17,8 @@ import RSChart from "./RSChart";
 import dataType from "../types/DataType";
 import { DataViewerAndSelectorsActionType } from "../types/DataViewerAndSelectorsContextType";
 import { useDataViewerAndSelectorsDispatch } from "../context/DataViewerAndSelectorsContext";
+import { ColorsType } from "../types/ColorsType";
+import { useColors } from "../context/ColorsContext";
 
 const Layout: React.FC<{
   id: string;
@@ -67,6 +68,8 @@ const Layout: React.FC<{
   const xAxisIdRS = `${xAxisId}-RS`;
 
   const resetBtnId = `${id}-reset-btn`;
+
+  const colors: ColorsType = useColors();
 
   const [reset, setReset] = useState<boolean>(false);
 

@@ -12,7 +12,6 @@ import {
   useConfigData,
   useConfigDispatch,
 } from "../context/ConfigtDataContext";
-import { colors } from "../utils/Colors";
 import { DataActionType, DataContextType } from "../types/DataContextType";
 import { useData, useDataDispatch } from "../context/DataContext";
 import * as d3 from "d3";
@@ -24,6 +23,8 @@ import {
   DataViewerAndSelectorsActionType,
   DataViewerAndSelectorsContextType,
 } from "../types/DataViewerAndSelectorsContextType";
+import { ColorsType } from "../types/ColorsType";
+import { useColors } from "../context/ColorsContext";
 const CandlesSelectorLinesAndLabels: React.FC<{
   candlesCanvasId: string;
   chartId: string;
@@ -46,6 +47,8 @@ const CandlesSelectorLinesAndLabels: React.FC<{
   const priceLabelHeight = 25;
   const dateLabelWidth = 150;
   const dateLabelHeight = 25;
+
+  const colors: ColorsType = useColors();
 
   const config: ConfigDataContextType = useConfigData();
   const data: DataContextType = useData();

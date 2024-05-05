@@ -17,6 +17,8 @@ import {
 } from "../types/ConfigDataContextType";
 import { DataViewerColorsType } from "../types/DataViewerColorsType";
 import { DataViewerTextsType } from "../types/DataViewerTextsType";
+import { ColorsActionType, ColorsType } from "../types/ColorsType";
+import { useColorsDispatch } from "../context/ColorsContext";
 
 const CandlestickChartController: React.FC<{
   chartData: any;
@@ -30,6 +32,7 @@ const CandlestickChartController: React.FC<{
     enable: boolean;
     max: number;
   };
+  ColorPalette: ColorsType;
   rangeSelector: {
     enable: boolean;
     height: number;
@@ -52,6 +55,7 @@ const CandlestickChartController: React.FC<{
   rangeSelector,
   responsiveBreakPoint,
   enableResetButton,
+  ColorPalette,
 }) => {
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
@@ -59,11 +63,17 @@ const CandlestickChartController: React.FC<{
   const config: ConfigDataContextType = useConfigData();
   const candlesCanvasId = `${id}-candles-canvas`;
 
+  const dispatchColors: Dispatch<ColorsActionType> = useColorsDispatch();
+
   const [yScaleFunction, setYScaleFunction] = useState<any>(null);
   const [xScaleFunction, setXScaleFunction] = useState<any>(null);
 
   const [RSYScaleFunction, setRSYScaleFunction] = useState<any>(null);
   const [RSXScaleFunction, setRSXScaleFunction] = useState<any>(null);
+
+  useEffect(() => {
+    dispatchColors({ type: "changeColors", colorPalette: ColorPalette });
+  }, [ColorPalette]);
 
   useEffect(() => {
     dispatchData({

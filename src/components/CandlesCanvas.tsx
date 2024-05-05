@@ -4,7 +4,8 @@ import { useConfigData } from "../context/ConfigtDataContext";
 import { DataContextType } from "../types/DataContextType";
 import { useData } from "../context/DataContext";
 import dataType from "../types/DataType";
-import { colors } from "../utils/Colors";
+import { ColorsType } from "../types/ColorsType";
+import { useColors } from "../context/ColorsContext";
 
 const CandlesCanvas: React.FC<{
   id: string;
@@ -16,6 +17,7 @@ const CandlesCanvas: React.FC<{
   const context2D = useRef<CanvasRenderingContext2D | null>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const scale = 3;
+  const colors: ColorsType = useColors();
 
   const createCandle = (candleWidth: number, candleData: dataType) => {
     if (Number.isNaN(candleWidth) || !candleWidth) return;

@@ -7,7 +7,8 @@ import { DataViewerAndSelectorsContextType } from "../types/DataViewerAndSelecto
 import { useDataViewerAndSelectors } from "../context/DataViewerAndSelectorsContext";
 import { ConfigDataContextType } from "../types/ConfigDataContextType";
 import { useConfigData } from "../context/ConfigtDataContext";
-import { colors } from "../utils/Colors";
+import { ColorsType } from "../types/ColorsType";
+import { useColors } from "../context/ColorsContext";
 
 const SelectedCandleDataViewer: React.FC<{
   dataViewerTexts: DataViewerTextsType;
@@ -17,6 +18,7 @@ const SelectedCandleDataViewer: React.FC<{
   const data: DataContextType = useData();
   const dataViewer: DataViewerAndSelectorsContextType =
     useDataViewerAndSelectors();
+  const colors: ColorsType = useColors();
   const showCandleInfo = dataViewer.candleIndex !== -1;
   const config: ConfigDataContextType = useConfigData();
 
