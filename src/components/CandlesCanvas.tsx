@@ -158,7 +158,7 @@ const CandlesCanvas: React.FC<{
   ]);
 
   useEffect(() => {
-    if (context2D.current) {
+    if (context2D.current && candleWidth > 0 && config.canvasHeight) {
       context2D.current?.clearRect(
         0,
         0,
