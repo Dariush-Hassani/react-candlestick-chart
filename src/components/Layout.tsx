@@ -72,6 +72,7 @@ const Layout: React.FC<{
   const colors: ColorsType = useColors();
 
   const [reset, setReset] = useState<boolean>(false);
+  const [resetInitialize, setResetInitialize] = useState<boolean>(false);
 
   const dispatchConfig: Dispatch<ConfigDataActionType> = useConfigDispatch();
   const dispatchData: Dispatch<DataActionType> = useDataDispatch();
@@ -177,9 +178,22 @@ const Layout: React.FC<{
   }, [reset, data.shownRange]);
 
   useEffect(() => {
-    let resetBtn = document.getElementById(`${resetBtnId}`);
+    if (
+      !resetInitialize &&
+      rangeSelector.initialRange &&
+      data.initData.length > 2 &&
+      data.candleWidthDate > 0
+    ) {
+      initialRangeCalculator(
+        rangeSelector.initialRange,
+        data.initData,
+        data.candleWidthDate,
+      );
+      dispatchDataViewer({ type: "changeShowLines", showLines: false });
+      setResetInitialize(true);
+    }
 
-    resetHandler();
+    let resetBtn = document.getElementById(`${resetBtnId}`);
 
     if (resetBtn) {
       resetBtn.addEventListener("click", resetHandler);
@@ -190,7 +204,12 @@ const Layout: React.FC<{
         resetBtn.removeEventListener("click", resetHandler);
       }
     };
-  }, [rangeSelector.initialRange, data.initData, data.candleWidthDate]);
+  }, [
+    rangeSelector.initialRange,
+    data.initData,
+    data.candleWidthDate,
+    resetInitialize,
+  ]);
 
   useEffect(() => {
     if (width !== 0 && height !== 0) {
