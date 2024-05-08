@@ -37,38 +37,38 @@ function App() {
 
 const data = [
   {
-  date: "2018-10-22", //or 1540166400000 or "2018-10-22 03:30"
-  open: 180.82,
-  high: 181.4,
-  low: 177.56,
-  close: 178.75,
+    date: "2018-10-22", //or 1540166400000 or "2018-10-22 03:30"
+    open: 180.82,
+    high: 181.4,
+    low: 177.56,
+    close: 178.75,
   },
   {
-  date: "2018-10-23",
-  open: 182.47,
-  high: 183.01,
-  low: 177.39,
-  close: 179.93,
-  position: {
-    positionType: "long",
-    sl: 170,
-    tp: 190,
-    positionValue: 180,
-  },
-  },
-  {
-  date: "2018-10-24",
-  open: 180.82,
-  high: 181.4,
-  low: 177.56,
-  close: 178.75,
+    date: "2018-10-23",
+    open: 182.47,
+    high: 183.01,
+    low: 177.39,
+    close: 179.93,
+    position: {
+        positionType: "long",
+        sl: 170,
+        tp: 190,
+        positionValue: 180,
+    },
   },
   {
-  date: "2018-10-25",
-  open: 180.82,
-  high: 181.4,
-  low: 177.56,
-  close: 178.75,
+    date: "2018-10-24",
+    open: 180.82,
+    high: 181.4,
+    low: 177.56,
+    close: 178.75,
+  },
+  {
+    date: "2018-10-25",
+    open: 180.82,
+    high: 181.4,
+    low: 177.56,
+    close: 178.75,
   },
   {
     date: "2018-10-26",
