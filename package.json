@@ -1,6 +1,6 @@
 {
   "name": "react-candlestick-chart",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "react candlestick chart component",
   "main": "dist/index.js",
   "files": [
@@ -33,5 +33,19 @@
     "@types/react-dom": "^18.2.19",
     "d3": "^7.8.5",
     "rimraf": "^5.0.5"
-  }
+  },
+  "keywords": [
+    "chart",
+    "charts",
+    "candlestick",
+    "canvas",
+    "graph",
+    "react",
+    "data",
+    "visualization",
+    "datavisualization",
+    "d3",
+    "html5",
+    "responsive"
+  ]
 }
