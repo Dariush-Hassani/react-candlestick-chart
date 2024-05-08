@@ -1,5 +1,5 @@
 ## react-candlestick-chart
-High performance, lightweight and interactive candlestick chart using the <canvas> tag, D3 and React.
+High performance, lightweight and interactive candlestick chart using the canvas tag, D3 and React.
 ## Installation
 
 ```bash
