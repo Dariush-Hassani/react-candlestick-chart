@@ -8,6 +8,8 @@ npm i react-candlestick-chart
 ## Demo
 To discover all features, capabilities and source code, check out [Live Demo](https://dariush-hassani.github.io/react-candlestick-chart-demo)
 
+![alt text](https://github.com/Dariush-Hassani/react-candlestick-chart-demo/blob/main/public/Animation.gif?raw=true)
+
 ## Basic Usage
 
 ```javascript
