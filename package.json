@@ -1,7 +1,7 @@
 {
   "name": "react-candlestick-chart",
-  "version": "1.0.6",
-  "description": "react candlestick chart component",
+  "version": "1.0.7",
+  "description": "High performance, lightweight and interactive candlestick chart using the canvas tag, D3 and React.",
   "main": "dist/index.js",
   "files": [
     "dist"
