@@ -1,5 +1,5 @@
 export type ColorsPropType = {
-  background: string;
+  background?: string;
   grid?: string;
   tick?: string;
   selectorLine?: string;
