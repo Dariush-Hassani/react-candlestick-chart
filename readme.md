@@ -8,7 +8,7 @@ npm i react-candlestick-chart
 ## Demo
 To discover all features, capabilities and source code, check out [Live Demo](https://dariush-hassani.github.io/react-candlestick-chart-demo)
 
-![alt text](https://github.com/Dariush-Hassani/react-candlestick-chart-demo/blob/main/public/Animation.gif?raw=true)
+![alt text](https://github.com/Dariush-Hassani/react-candlestick-chart-demo/blob/main/public/Animation3.gif?raw=true)
 
 ## Basic Usage
 
@@ -32,7 +32,6 @@ function App() {
           height: 150,
           initialRange: { type: "month", value: 1 },
         }}
-        enableResetButton={true}
       />
   );
 }
