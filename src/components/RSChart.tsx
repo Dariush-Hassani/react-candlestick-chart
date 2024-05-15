@@ -34,7 +34,7 @@ const RSChart: React.FC<{
   const colors: ColorsType = useColors();
   useEffect(() => {
     if (config.isMobile) {
-      setSizer(20);
+      setSizer(10);
     } else {
       setSizer(4);
     }
