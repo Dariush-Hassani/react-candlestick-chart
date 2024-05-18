@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ConfigDataContextType } from "../types/ConfigDataContextType";
 import { useConfigData } from "../context/ConfigtDataContext";
 import { DataContextType } from "../types/DataContextType";
@@ -18,6 +18,8 @@ const CandlesCanvas: React.FC<{
   const canvas = useRef<HTMLCanvasElement>(null);
   const scale = 3;
   const colors: ColorsType = useColors();
+  const [candleWidth,setCandleWidth] = useState<number>(0);
+  const [firstRender,setFirstRender] = useState<boolean>(true);
 
   const createCandle = (candleWidth: number, candleData: dataType) => {
     if (Number.isNaN(candleWidth) || !candleWidth) return;
@@ -141,20 +143,43 @@ const CandlesCanvas: React.FC<{
     }
   }, [canvas.current]);
 
-  const candleWidth = useMemo<number>(() => {
-    if (!xScaleFunction || !yScaleFunction) return 0;
-
-    let lockerWidth: number =
+  useEffect(()=>{
+    if(firstRender && xScaleFunction && yScaleFunction){
+      let lockerWidth: number =
       xScaleFunction(data.minMaxShownDate.min + data.candleLockerWidthDate) -
       xScaleFunction(data.minMaxShownDate.min);
-    return Number.isNaN(lockerWidth) ? 0 : lockerWidth - 0.3 * lockerWidth;
-  }, [
+
+      let canWidth = Number.isNaN(lockerWidth) ? 0 : lockerWidth - 0.3 * lockerWidth;
+      if(canWidth > 0){
+        setCandleWidth(canWidth);
+        setFirstRender(false);
+      }
+    }
+  },[
+    data.shownData,
     data.candleLockerWidthDate,
     data.candleWidthDate,
     config.canvasWidth,
     config.canvasHeight,
     xScaleFunction,
-    yScaleFunction,
+    yScaleFunction
+  ])
+  useEffect(() => {
+    if(firstRender) return;
+
+    let lockerWidth: number =
+      xScaleFunction(data.minMaxShownDate.min + data.candleLockerWidthDate) -
+      xScaleFunction(data.minMaxShownDate.min);
+
+    let canWidth = Number.isNaN(lockerWidth) ? 0 : lockerWidth - 0.3 * lockerWidth;
+     setCandleWidth(canWidth)
+  }, [
+    data.shownData,
+    data.candleLockerWidthDate,
+    data.candleWidthDate,
+    config.canvasWidth,
+    config.canvasHeight,
+    firstRender
   ]);
 
   useEffect(() => {
@@ -170,7 +195,16 @@ const CandlesCanvas: React.FC<{
           createCandle(candleWidth, data.shownData[i]);
       }
     }
-  }, [context2D.current, candleWidth, data.shownData, config.canvasHeight]);
+  }, [
+    context2D.current, 
+    candleWidth, 
+    data.candleLockerWidthDate,
+    data.candleWidthDate,
+    config.canvasWidth,
+    config.canvasHeight,
+    xScaleFunction,
+    yScaleFunction
+  ]);
 
   return (
     <canvas
