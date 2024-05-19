@@ -331,16 +331,6 @@ const CandlesSelectorLinesAndLabels: React.FC<{
     if (config.pan) {
       setPanTarget(xScaleFunction?.invert(positionX));
       setPanDateWidth(data.minMaxShownDate.max - data.minMaxShownDate.min);
-    } else {
-      if (data.shownRange.start && data.shownRange.end) {
-        dispatchData({
-          type: "changeShownRange",
-          shownRange: {
-            start: data.shownRange.start,
-            end: data.shownRange.end,
-          },
-        });
-      }
     }
   }, [config.pan]);
 
