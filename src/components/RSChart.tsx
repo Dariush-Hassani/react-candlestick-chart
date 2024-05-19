@@ -120,15 +120,6 @@ const RSChart: React.FC<{
     } else {
       setPanTarget(0);
       setLeftDistanceToTarget(0);
-      if (data.shownRange.start && data.shownRange.end) {
-        dispatchData({
-          type: "changeShownRange",
-          shownRange: {
-            start: data.shownRange.start,
-            end: data.shownRange.end,
-          },
-        });
-      }
     }
   }, [pan]);
 
