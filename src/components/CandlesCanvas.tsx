@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ConfigDataContextType } from "../types/ConfigDataContextType";
 import { useConfigData } from "../context/ConfigtDataContext";
 import { DataContextType } from "../types/DataContextType";
@@ -18,8 +18,19 @@ const CandlesCanvas: React.FC<{
   const canvas = useRef<HTMLCanvasElement>(null);
   const scale = 3;
   const colors: ColorsType = useColors();
-  const [candleWidth,setCandleWidth] = useState<number>(0);
-  const [firstRender,setFirstRender] = useState<boolean>(true);
+  const [candleWidth, setCandleWidth] = useState<number>(0);
+  const [firstRender, setFirstRender] = useState<boolean>(true);
+  const calcCandleWidth = (
+    minMaxShownDate: { min: number; max: number },
+    candleWidthDate: number,
+  ) => {
+    let candleWidth: number =
+      xScaleFunction(minMaxShownDate.min + candleWidthDate) -
+      xScaleFunction(minMaxShownDate.min);
+
+    candleWidth = Number.isNaN(candleWidth) ? 0 : candleWidth;
+    return candleWidth;
+  };
 
   const createCandle = (candleWidth: number, candleData: dataType) => {
     if (Number.isNaN(candleWidth) || !candleWidth) return;
@@ -143,43 +154,41 @@ const CandlesCanvas: React.FC<{
     }
   }, [canvas.current]);
 
-  useEffect(()=>{
-    if(firstRender && xScaleFunction && yScaleFunction){
-      let lockerWidth: number =
-      xScaleFunction(data.minMaxShownDate.min + data.candleLockerWidthDate) -
-      xScaleFunction(data.minMaxShownDate.min);
+  useEffect(() => {
+    if (firstRender && xScaleFunction && yScaleFunction) {
+      let candleWidth: number = calcCandleWidth(
+        data.minMaxShownDate,
+        data.candleWidthDate,
+      );
 
-      let canWidth = Number.isNaN(lockerWidth) ? 0 : lockerWidth - 0.3 * lockerWidth;
-      if(canWidth > 0){
-        setCandleWidth(canWidth);
+      if (candleWidth > 0) {
+        setCandleWidth(candleWidth);
         setFirstRender(false);
       }
     }
-  },[
+  }, [
     data.shownData,
-    data.candleLockerWidthDate,
     data.candleWidthDate,
     config.canvasWidth,
     config.canvasHeight,
     xScaleFunction,
-    yScaleFunction
-  ])
+    yScaleFunction,
+  ]);
   useEffect(() => {
-    if(firstRender) return;
+    if (firstRender) return;
 
-    let lockerWidth: number =
-      xScaleFunction(data.minMaxShownDate.min + data.candleLockerWidthDate) -
-      xScaleFunction(data.minMaxShownDate.min);
+    let candleWidth: number = calcCandleWidth(
+      data.minMaxShownDate,
+      data.candleWidthDate,
+    );
 
-    let canWidth = Number.isNaN(lockerWidth) ? 0 : lockerWidth - 0.3 * lockerWidth;
-     setCandleWidth(canWidth)
+    setCandleWidth(candleWidth);
   }, [
     data.shownData,
-    data.candleLockerWidthDate,
     data.candleWidthDate,
     config.canvasWidth,
     config.canvasHeight,
-    firstRender
+    firstRender,
   ]);
 
   useEffect(() => {
@@ -196,14 +205,13 @@ const CandlesCanvas: React.FC<{
       }
     }
   }, [
-    context2D.current, 
-    candleWidth, 
-    data.candleLockerWidthDate,
+    context2D.current,
+    candleWidth,
     data.candleWidthDate,
     config.canvasWidth,
     config.canvasHeight,
     xScaleFunction,
-    yScaleFunction
+    yScaleFunction,
   ]);
 
   return (

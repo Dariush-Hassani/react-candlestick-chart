@@ -6,8 +6,11 @@ export const dateArrayNormalizer = (data: (string | number)[]): number[] => {
     if (data.length === 0) return [];
     let rv: number[] = [];
     data.forEach((date) => {
-      if (typeof date === "string") rv.push(new Date(date).getTime());
-      else rv.push(date);
+      if (typeof date === "string") {
+        let time = new Date(date).getTime();
+        let strTime = new Date(time).toDateString();
+        rv.push(new Date(strTime).getTime());
+      } else rv.push(date);
     });
     return rv;
   } catch (error) {
