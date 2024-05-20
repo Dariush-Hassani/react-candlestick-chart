@@ -61,7 +61,6 @@ export const dateArrayNormalizer = (data: (string | number)[]): number[] => {
     data.forEach((date) => {
       if (typeof date === "string") {
         let nDate = stringDateNormalizer(date);
-        alert(nDate);
         rv.push(new Date(nDate).getTime());
       } else rv.push(date);
     });
