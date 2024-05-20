@@ -1,15 +1,68 @@
 import DataType from "../types/DataType";
 import dataType from "../types/DataType";
 
+export const stringDateNormalizer = (dateTime: string): string => {
+  let normalDateTime = dateTime.trim();
+  let splitDateTime1 = normalDateTime.split(" ");
+  let splitDateTime2 = normalDateTime.split("T");
+
+  let hasTime1 = splitDateTime1.length === 2;
+  let hasTime2 = splitDateTime2.length === 2;
+
+  let newDate: string;
+  let newTime = "";
+
+  if (hasTime1) {
+    newDate = splitDateTime1[0];
+    newTime = splitDateTime1[1];
+  } else if (hasTime2) {
+    newDate = splitDateTime2[0];
+    newTime = splitDateTime2[1];
+  } else {
+    newDate = normalDateTime;
+  }
+
+  //normalizeDate
+  let splitDate = newDate.split("-");
+
+  if (splitDate.length !== 3) throw new Error("Invalid Date");
+
+  let year = parseInt(splitDate[0]);
+  let month = parseInt(splitDate[1]);
+  let day = parseInt(splitDate[2]);
+
+  let rv = "";
+
+  let rvDate = `${year}-${month < 10 ? "0" + month : month}-${
+    day < 10 ? "0" + day : day
+  }`;
+
+  rv += rvDate;
+
+  if (newTime !== "") {
+    let splitTime = newTime.split(":");
+    if (splitTime.length !== 2) throw new Error("Invalid Time");
+
+    let hours = parseInt(splitTime[0]);
+    let minutes = parseInt(splitTime[1]);
+
+    let rvTime = `${hours < 10 ? "0" + hours : hours}:${
+      minutes < 10 ? "0" + minutes : minutes
+    }`;
+
+    rv += "T" + rvTime;
+  }
+  return rv;
+};
 export const dateArrayNormalizer = (data: (string | number)[]): number[] => {
   try {
     if (data.length === 0) return [];
     let rv: number[] = [];
     data.forEach((date) => {
       if (typeof date === "string") {
-        let time = new Date(date).getTime();
-        let strTime = new Date(time).toDateString();
-        rv.push(new Date(strTime).getTime());
+        let nDate = stringDateNormalizer(date);
+        alert(nDate);
+        rv.push(new Date(nDate).getTime());
       } else rv.push(date);
     });
     return rv;
