@@ -101,6 +101,7 @@ const Layout: React.FC<{
     },
     initData: dataType[],
     candleWidthDate: number,
+    candleLockerWidthDate: number,
   ) => {
     if (initData.length < 2 || !initialRange || !candleWidthDate) return;
 
@@ -133,19 +134,20 @@ const Layout: React.FC<{
       else if (initialRange.type === "month")
         rangeInMilliSeconds = val * coeff * 24 * 30;
 
+      debugger;
+      let nCandle = Math.ceil(rangeInMilliSeconds / candleLockerWidthDate);
+
       let lastDate = initData[initData.length - 1].date;
-      let firstDate = initData[0].date;
+      let startDate = lastDate - (nCandle - 1) * candleLockerWidthDate;
 
-      let startRange = lastDate - rangeInMilliSeconds;
-      let endRange = lastDate;
-
-      if (startRange < firstDate) startRange = firstDate;
+      let startRange = startDate - candleWidthDate / 2;
+      let endRange = lastDate + candleWidthDate / 2;
 
       dispatchData({
         type: "changeShownRange",
         shownRange: {
-          start: startRange + candleWidthDate / 2,
-          end: endRange + candleWidthDate / 2,
+          start: startRange,
+          end: endRange,
         },
       });
     }
@@ -156,6 +158,7 @@ const Layout: React.FC<{
       rangeSelector.initialRange,
       data.initData,
       data.candleWidthDate,
+      data.candleLockerWidthDate,
     );
     dispatchDataViewer({ type: "changeShowLines", showLines: false });
 
@@ -188,6 +191,7 @@ const Layout: React.FC<{
         rangeSelector.initialRange,
         data.initData,
         data.candleWidthDate,
+        data.candleLockerWidthDate,
       );
       dispatchDataViewer({ type: "changeShowLines", showLines: false });
       setResetInitialize(true);
@@ -371,13 +375,17 @@ const Layout: React.FC<{
             <g
               id={`${yAxisIdRS}`}
               style={{
-                transform: `translate(0,${config.canvasHeight ? config.canvasHeight + paddingBottom : 0}px`,
+                transform: `translate(0,${
+                  config.canvasHeight ? config.canvasHeight + paddingBottom : 0
+                }px`,
               }}
             ></g>
             <g
               id={`${xAxisIdRS}`}
               style={{
-                transform: `translate(0,${config.canvasHeight ? config.canvasHeight + paddingBottom : 0}px`,
+                transform: `translate(0,${
+                  config.canvasHeight ? config.canvasHeight + paddingBottom : 0
+                }px`,
               }}
             ></g>
             <foreignObject
