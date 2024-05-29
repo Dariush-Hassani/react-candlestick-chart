@@ -134,7 +134,6 @@ const Layout: React.FC<{
       else if (initialRange.type === "month")
         rangeInMilliSeconds = val * coeff * 24 * 30;
 
-      debugger;
       let nCandle = Math.ceil(rangeInMilliSeconds / candleLockerWidthDate);
 
       let lastDate = initData[initData.length - 1].date;
