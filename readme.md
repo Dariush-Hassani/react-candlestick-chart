@@ -12,7 +12,7 @@ npm i react-candlestick-chart
 
 To discover all features, capabilities and source code, check out [Live Demo](https://dariush-hassani.github.io/react-candlestick-chart)
 
-![alt text](https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/public/Animation3.gif?raw=true)
+![alt text](https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/demo/public/Animation3.gif?raw=true)
 
 ## Basic Usage
 
