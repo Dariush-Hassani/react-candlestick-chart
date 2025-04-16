@@ -12,7 +12,7 @@ const Navbar = () => {
           <div>
             <img
               alt="git"
-              src="https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/demo/public/gitHubLogo.svg"
+              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/refs/heads/main/demo/public/gitHubLogo.svg"
             />
             &nbsp;source-code (demo)
           </div>
@@ -26,7 +26,7 @@ const Navbar = () => {
           <div>
             <img
               alt="npm"
-              src="https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/demo/public/npm.svg"
+              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/refs/heads/main/demo/public/npm.svg"
             />
             &nbsp;npm package
           </div>
@@ -39,7 +39,7 @@ const Navbar = () => {
           <div>
             <img
               alt="git"
-              src="https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/demo/public/gitHubLogo.svg"
+              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/refs/heads/main/demo/public/gitHubLogo.svg"
             />
             &nbsp;github repository
           </div>
