@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/react-candlestick-chart/static/css/main.455c1339.css",
-    "main.js": "/react-candlestick-chart/static/js/main.e52486c9.js",
+    "main.js": "/react-candlestick-chart/static/js/main.63ef18bd.js",
     "index.html": "/react-candlestick-chart/index.html",
     "main.455c1339.css.map": "/react-candlestick-chart/static/css/main.455c1339.css.map",
-    "main.e52486c9.js.map": "/react-candlestick-chart/static/js/main.e52486c9.js.map"
+    "main.63ef18bd.js.map": "/react-candlestick-chart/static/js/main.63ef18bd.js.map"
   },
   "entrypoints": [
     "static/css/main.455c1339.css",
-    "static/js/main.e52486c9.js"
+    "static/js/main.63ef18bd.js"
   ]
 }
