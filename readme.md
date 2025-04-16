@@ -1,50 +1,54 @@
 ## react-candlestick-chart
+
 High performance, lightweight and interactive candlestick chart using the canvas tag, D3 and React.
+
 ## Installation
 
 ```bash
 npm i react-candlestick-chart
 ```
-## Demo
-To discover all features, capabilities and source code, check out [Live Demo](https://dariush-hassani.github.io/react-candlestick-chart-demo)
 
-![alt text](https://github.com/Dariush-Hassani/react-candlestick-chart-demo/blob/main/public/Animation3.gif?raw=true)
+## Demo
+
+To discover all features, capabilities and source code, check out [Live Demo](https://dariush-hassani.github.io/react-candlestick-chart)
+
+![alt text](https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/public/Animation3.gif?raw=true)
 
 ## Basic Usage
 
 ```javascript
-import CandlestickChart from 'react-candlestick-chart';
+import CandlestickChart from "react-candlestick-chart";
 
 function App() {
   return (
-      <CandlestickChart
-        data={data}
-        id={"chart1"}
-        width={1000}
-        height={400}
-        decimal={2}
-        scrollZoom={{
-          enable: true,
-          max: 20,
-        }}
-        rangeSelector={{
-          enable: true,
-          height: 150,
-          initialRange: { type: "month", value: 1 },
-        }}
-      />
+    <CandlestickChart
+      data={data}
+      id={"chart1"}
+      width={1000}
+      height={400}
+      decimal={2}
+      scrollZoom={{
+        enable: true,
+        max: 20,
+      }}
+      rangeSelector={{
+        enable: true,
+        height: 150,
+        initialRange: { type: "month", value: 1 },
+      }}
+    />
   );
 }
 ```
 
 ## Props
+
 ### data - required
+
 ```javascript
-data : any;
+data: any;
 
-example:
-
-[
+example: [
   {
     date: "2018-10-23", //or 1540166400000 or "2018-10-22 03:30"
     open: 182.47,
@@ -53,10 +57,10 @@ example:
     close: 179.93,
     //position is optional
     position: {
-        positionType: "long", // or "short"
-        sl: 170, //stop loss
-        tp: 190, // take profit
-        positionValue: 180,
+      positionType: "long", // or "short"
+      sl: 170, //stop loss
+      tp: 190, // take profit
+      positionValue: 180,
     },
   },
   {
@@ -65,29 +69,35 @@ example:
     high: 181.4,
     low: 177.56,
     close: 178.75,
-  }
-]
+  },
+];
 ```
 
 ### id - required
+
 ```javascript
 id: string;
- ```
+```
+
 ### width - required
+
 ```javascript
 width: number;
- ```
+```
 
 ### height - required
+
 ```javascript
 height: number;
- ```
-###  decimal? - optional
+```
+
+### decimal? - optional
+
 decimal for price axis.
+
 ```javascript
 decimal?: number; // default value = 0
- ```
-
+```
 
 ### scrollZoom? - optional
 
@@ -107,6 +117,7 @@ default value :
 ```
 
 ### rangeSelector? - optional
+
 ```javascript
 rangeSelector?: {
   enable: boolean;
@@ -137,10 +148,13 @@ responsiveBreakPoint?: number; // default value = 400 (px)
 ```
 
 ### enableResetButton? - optional
+
 ```javascript
 enableResetButton?: boolean; // default value = true
 ```
+
 ### dataViewerTexts? - optional
+
 ```javascript
 dataViewerTexts? : {
   shortPosition?: string;
@@ -169,6 +183,7 @@ default value:
 ```
 
 ### dataViewerColors? - optional
+
 ```javascript
 dataViewerColors? : {
   shortPositionLabel?: string;
@@ -221,6 +236,7 @@ default value:
 ```
 
 ### ColorPalette? - optional
+
 ```javascript
 ColorPalette? : {
   background?: string;
@@ -259,10 +275,10 @@ default value:
   RSChartStroke:"#04F5F9",
   RSChartOverlay:"#000",
   RSChartOverlayResize:"#e13443",
-  resetButtonColor:"#04F5F9",            
+  resetButtonColor:"#04F5F9",
 }
 */
-````
+```
 
 ## License
 

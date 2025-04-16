@@ -2,13 +2,13 @@ const InfoModal = () => {
   return (
     <div className={"nav-container-mobile"}>
       <a
-        href={"https://github.com/Dariush-Hassani/react-candlestick-chart-demo"}
+        href={"https://github.com/Dariush-Hassani/react-candlestick-chart"}
         target="_blank"
       >
         <div>
           <img
             alt="git"
-            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart-demo/main/public/gitHubLogo.svg"
+            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/gitHubLogo.svg"
           />
           &nbsp;source-code (demo)
         </div>
@@ -21,7 +21,7 @@ const InfoModal = () => {
         <div>
           <img
             alt="npm"
-            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart-demo/main/public/npm.svg"
+            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/npm.svg"
           />
           &nbsp;npm package
         </div>

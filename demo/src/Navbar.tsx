@@ -6,15 +6,13 @@ const Navbar = () => {
       <div>Demo for react-candlestick-chart ({data.length} candles)</div>
       <div className={"nav-container"}>
         <a
-          href={
-            "https://github.com/Dariush-Hassani/react-candlestick-chart-demo"
-          }
+          href={"https://github.com/Dariush-Hassani/react-candlestick-chart"}
           target="_blank"
         >
           <div>
             <img
               alt="git"
-              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart-demo/main/public/gitHubLogo.svg"
+              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/gitHubLogo.svg"
             />
             &nbsp;source-code (demo)
           </div>
@@ -28,7 +26,7 @@ const Navbar = () => {
           <div>
             <img
               alt="npm"
-              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart-demo/main/public/npm.svg"
+              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/npm.svg"
             />
             &nbsp;npm package
           </div>
@@ -41,7 +39,7 @@ const Navbar = () => {
           <div>
             <img
               alt="git"
-              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart-demo/main/public/gitHubLogo.svg"
+              src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/gitHubLogo.svg"
             />
             &nbsp;github repository
           </div>
