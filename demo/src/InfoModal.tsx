@@ -8,7 +8,7 @@ const InfoModal = () => {
         <div>
           <img
             alt="git"
-            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/gitHubLogo.svg"
+            src="https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/demo/public/gitHubLogo.svg"
           />
           &nbsp;source-code (demo)
         </div>
@@ -21,7 +21,7 @@ const InfoModal = () => {
         <div>
           <img
             alt="npm"
-            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/npm.svg"
+            src="https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/demo/public/npm.svg"
           />
           &nbsp;npm package
         </div>
@@ -33,7 +33,7 @@ const InfoModal = () => {
         <div>
           <img
             alt="git"
-            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/gitHubLogo.svg"
+            src="https://github.com/Dariush-Hassani/react-candlestick-chart/blob/main/demo/public/gitHubLogo.svg"
           />
           &nbsp;github repository
         </div>
