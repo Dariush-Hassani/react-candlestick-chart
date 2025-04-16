@@ -33,7 +33,7 @@ const InfoModal = () => {
         <div>
           <img
             alt="git"
-            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart-demo/main/public/gitHubLogo.svg"
+            src="https://raw.githubusercontent.com/Dariush-Hassani/react-candlestick-chart/main/public/gitHubLogo.svg"
           />
           &nbsp;github repository
         </div>
